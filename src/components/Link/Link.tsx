@@ -14,6 +14,7 @@ type LinkProps = {
   children?: any;
   href: string;
   native?: boolean;
+  style?: any;
 };
 
 export default function Link({ children, href, native, ...props }: LinkProps) {

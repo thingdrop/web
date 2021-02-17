@@ -44,6 +44,8 @@ export default function Navbar() {
       <Nav>
         <Form onSubmit={handleSubmit}>
           <TextField
+            name="search"
+            id="search"
             value={search}
             onChange={handleChange}
             label="Search"

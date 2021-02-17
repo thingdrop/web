@@ -32,6 +32,7 @@ type TextFieldProps = {
   placeholder?: string;
   multiline?: boolean | number;
   error?: string;
+  style?: any;
 };
 
 const FieldError = styled(InlineError)`

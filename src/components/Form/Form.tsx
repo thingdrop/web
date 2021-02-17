@@ -1,6 +1,6 @@
 type FormProps = {
   children: any;
-  onSubmit: () => void;
+  onSubmit: (event: any) => void;
 };
 
 export default function Form({ children, ...props }: FormProps) {
