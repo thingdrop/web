@@ -1,13 +1,13 @@
-import { forwardRef } from "react";
-import styled from "styled-components";
+import { forwardRef } from 'react';
+import styled from 'styled-components';
 
 const headingSizeMap = {
-  h1: "largest",
-  h2: "larger",
-  h3: "large",
-  h4: "medium",
-  h5: "small",
-  h6: "small",
+  h1: 'largest',
+  h2: 'larger',
+  h3: 'large',
+  h4: 'medium',
+  h5: 'small',
+  h6: 'small',
 };
 
 const getFontVariable = ({ as }) => `var(--font-size-${headingSizeMap[as]})`;

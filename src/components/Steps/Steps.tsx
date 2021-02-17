@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import Link from "../Link";
+import styled from 'styled-components';
+import Link from '../Link';
 
 const StyledList = styled.ol`
   list-style: none;
@@ -21,7 +21,7 @@ const StyledListItem = styled.li`
   }
   /* Circle */
   :before {
-    content: counter(muffins) "";
+    content: counter(muffins) '';
     font-size: var(--font-size-smaller);
     font-weight: var(--font-weight-medium);
     line-height: 30px;

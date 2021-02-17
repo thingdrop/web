@@ -1,6 +1,6 @@
-import { forwardRef } from "react";
-import styled from "styled-components";
-import Label from "../Label";
+import { forwardRef } from 'react';
+import styled from 'styled-components';
+import Label from '../Label';
 
 const StyledRadio = styled.input`
   margin-right: var(--spacing-medium);

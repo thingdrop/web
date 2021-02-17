@@ -1,5 +1,5 @@
-import { forwardRef } from "react";
-import styled from "styled-components";
+import { forwardRef } from 'react';
+import styled from 'styled-components';
 
 const StyledLabel = styled.label`
   display: flex;
@@ -23,13 +23,13 @@ const Label = forwardRef(
     return (
       <StyledLabel
         {...props}
-        className={[className, hidden && "sr-only"]}
+        className={[className, hidden && 'sr-only']}
         ref={ref}
       >
         {children}
       </StyledLabel>
     );
-  }
+  },
 );
 
 export default Label;

@@ -1,6 +1,6 @@
-import Head from "next/head";
-import { Layout, Grid } from "@/components";
-import styled from "styled-components";
+import Head from 'next/head';
+import { Layout, Grid } from '@/components';
+import styled from 'styled-components';
 
 const Footer = styled.footer`
   background: var(--color-background-secondary);
@@ -24,7 +24,7 @@ export default function Home({ posts }) {
 export async function getServerSideProps(context) {
   const { params } = context;
 
-  const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+  const res = await fetch('https://jsonplaceholder.typicode.com/posts');
   const posts = await res.json();
   return {
     props: {

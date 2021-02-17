@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import Navbar from "../Navbar";
+import styled from 'styled-components';
+import Navbar from '../Navbar';
 
 const Wrapper = styled.div`
   display: grid;

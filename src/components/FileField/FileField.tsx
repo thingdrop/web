@@ -1,9 +1,9 @@
-import { forwardRef, useState } from "react";
-import styled from "styled-components";
-import Label from "../Label";
-import { CloudUploadOutline as UploadIcon } from "@styled-icons/evaicons-outline";
-import InlineError from "../InlineError";
-import { fileType } from "@/utils";
+import { forwardRef, useState } from 'react';
+import styled from 'styled-components';
+import Label from '../Label';
+import { CloudUploadOutline as UploadIcon } from '@styled-icons/evaicons-outline';
+import InlineError from '../InlineError';
+import { fileType } from '@/utils';
 
 const HiddenInput = styled.input`
   top: 0;
@@ -19,7 +19,7 @@ const UploadArea = styled.div`
   position: relative;
   padding: calc(var(--spacing-loosest) * 4) var(--spacing-loosest);
   border: var(--border-medium) solid
-    ${(p) => (p.error ? "var(--color-error)" : "var(--color-secondary)")};
+    ${(p) => (p.error ? 'var(--color-error)' : 'var(--color-secondary)')};
   border-radius: var(--border-radius-medium);
   transition: background var(--timing-fast);
   * {
@@ -49,7 +49,7 @@ const FileEntry = styled.div`
   }
 `;
 
-const uploadMessage = "Drag and drop one or more files, or click to upload.";
+const uploadMessage = 'Drag and drop one or more files, or click to upload.';
 
 type FileFieldProps = {
   label: string;
@@ -95,7 +95,7 @@ const FileField = forwardRef((props: FileFieldProps, ref: any) => {
       const file = files[i];
       if (!validateFile(file)) {
         onError({
-          type: "manual",
+          type: 'manual',
           message: `The .${fileType(file.name)} file type is not supported.`,
         });
         return;
@@ -105,7 +105,7 @@ const FileField = forwardRef((props: FileFieldProps, ref: any) => {
   };
 
   const validateFile = (file) => {
-    const validTypes = ["stl", "obj", "glb"];
+    const validTypes = ['stl', 'obj', 'glb'];
     const extension = fileType(file.name);
     return validTypes.includes(extension);
   };
@@ -116,14 +116,14 @@ const FileField = forwardRef((props: FileFieldProps, ref: any) => {
   };
 
   return (
-    <Label id={labelId} htmlFor={id} style={{ display: "block" }}>
+    <Label id={labelId} htmlFor={id} style={{ display: 'block' }}>
       <UploadArea
         onDragOver={silenceEvent}
         onDragEnter={toggleDrag}
         onDragLeave={toggleDrag}
         onDrop={handleFileDrop}
         error={error}
-        className={isDragging ? "drag" : null}
+        className={isDragging ? 'drag' : null}
       >
         <HiddenInput
           className="sr-only"

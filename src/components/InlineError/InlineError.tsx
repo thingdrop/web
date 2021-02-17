@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { ErrorCircle } from "@styled-icons/boxicons-solid";
+import styled from 'styled-components';
+import { ErrorCircle } from '@styled-icons/boxicons-solid';
 
 const ErrorWrapper = styled.div`
   display: flex;

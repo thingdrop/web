@@ -1,1 +1,1 @@
-export * from "./file.util";
+export * from './file.util';

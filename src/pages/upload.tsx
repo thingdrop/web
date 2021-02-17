@@ -1,6 +1,6 @@
-import Head from "next/head";
-import { useForm } from "react-hook-form";
-import styled from "styled-components";
+import Head from 'next/head';
+import { useForm } from 'react-hook-form';
+import styled from 'styled-components';
 import {
   Button,
   Heading,
@@ -13,11 +13,11 @@ import {
   FormFields,
   Steps,
   VisuallyHidden,
-} from "@/components";
-import { fileSize } from "@/utils";
+} from '@/components';
+import { fileSize } from '@/utils';
 
 const validateFileList = (value: FileList) =>
-  value.length > 0 || "You gotta upload at least one file.";
+  value.length > 0 || 'You gotta upload at least one file.';
 
 type UploadFields = {
   name: string;
@@ -26,7 +26,7 @@ type UploadFields = {
   files: FileList;
 };
 
-const requiredMessage = "This field is required";
+const requiredMessage = 'This field is required';
 
 const Main = styled.main`
   display: flex;
@@ -74,7 +74,7 @@ export default function Upload() {
     clearErrors,
   } = useForm<UploadFields>();
 
-  const fileList = watch("files");
+  const fileList = watch('files');
   const fileOptions = fileListToOptions(fileList);
 
   const onSubmit = (data) => console.log(data);
@@ -89,14 +89,14 @@ export default function Upload() {
         <Sidebar>
           <Steps
             steps={[
-              { label: "Upload Models", id: "uploadModels" },
+              { label: 'Upload Models', id: 'uploadModels' },
               {
-                label: "Basic Information",
-                id: "basicInfo",
+                label: 'Basic Information',
+                id: 'basicInfo',
               },
               {
-                label: "Optional Fields",
-                id: "optionalFields",
+                label: 'Optional Fields',
+                id: 'optionalFields',
               },
             ]}
           />
@@ -113,10 +113,10 @@ export default function Upload() {
                 id="upload"
                 name="files"
                 onChange={(files) => {
-                  clearErrors("files");
-                  setValue("files", files, { shouldValidate: true });
+                  clearErrors('files');
+                  setValue('files', files, { shouldValidate: true });
                 }}
-                onError={(error) => setError("files", error)}
+                onError={(error) => setError('files', error)}
                 label="Upload files"
                 ref={register({ validate: validateFileList })}
                 multiple

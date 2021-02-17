@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 const StyledButton = styled.div`
   cursor: pointer;
@@ -22,9 +22,9 @@ type ButtonProps = {
 };
 
 export default function Button({ children, href, type, ...rest }: ButtonProps) {
-  const element = href ? "a" : "button";
+  const element = href ? 'a' : 'button';
   return (
-    <StyledButton type={type || "button"} as={element} href={href} {...rest}>
+    <StyledButton type={type || 'button'} as={element} href={href} {...rest}>
       {children}
     </StyledButton>
   );

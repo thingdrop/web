@@ -1,7 +1,7 @@
-import { useRouter } from "next/router";
-import { useState } from "react";
-import styled from "styled-components";
-import { TextField, Form, Button, ThemeToggle, Link } from "@/components";
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+import styled from 'styled-components';
+import { TextField, Form, Button, ThemeToggle, Link } from '@/components';
 
 const Header = styled.header`
   display: grid;
@@ -22,7 +22,7 @@ const Nav = styled.nav`
 `;
 
 export default function Navbar() {
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const router = useRouter();
 
   const handleChange = (event) => {
@@ -37,7 +37,7 @@ export default function Navbar() {
 
   return (
     <Header>
-      <Link href="/" style={{ justifySelf: "end" }}>
+      <Link href="/" style={{ justifySelf: 'end' }}>
         <img height="38" src="/thingdrop-logo.svg" alt="Thingdrop Logo" />
       </Link>
 
@@ -49,7 +49,7 @@ export default function Navbar() {
             label="Search"
             labelHidden
             placeholder="Search for 3D models"
-            style={{ minWidth: "40ch" }}
+            style={{ minWidth: '40ch' }}
           />
         </Form>
         <Link href="/">Discover</Link>

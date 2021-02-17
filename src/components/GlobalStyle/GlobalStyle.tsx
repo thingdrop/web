@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle } from 'styled-components';
 import {
   SPACING,
   FONT,
@@ -7,7 +7,7 @@ import {
   BORDER,
   BORDER_RADIUS,
   TIMING,
-} from "@/constants";
+} from '@/constants';
 
 const GlobalStyle = createGlobalStyle`
   html {

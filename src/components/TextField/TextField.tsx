@@ -1,7 +1,7 @@
-import { forwardRef } from "react";
-import styled from "styled-components";
-import InlineError from "../InlineError";
-import Label from "../Label";
+import { forwardRef } from 'react';
+import styled from 'styled-components';
+import InlineError from '../InlineError';
+import Label from '../Label';
 
 const StyledTextField = styled.div`
   font-family: var(--font-body);
@@ -10,11 +10,11 @@ const StyledTextField = styled.div`
   background: var(--color-background);
   border-radius: var(--border-radius-medium);
   border: var(--border-medium) solid
-    ${(p) => (p.error ? "var(--color-error)" : "var(--color-secondary)")};
+    ${(p) => (p.error ? 'var(--color-error)' : 'var(--color-secondary)')};
   color: var(--color-text);
-  width: ${(p) => (p.fullWidth ? "100%" : "auto")};
-  max-width: ${(p) => (p.fullWidth ? "100%" : "auto")};
-  min-width: ${(p) => (p.fullWidth ? "100%" : "auto")};
+  width: ${(p) => (p.fullWidth ? '100%' : 'auto')};
+  max-width: ${(p) => (p.fullWidth ? '100%' : 'auto')};
+  min-width: ${(p) => (p.fullWidth ? '100%' : 'auto')};
 `;
 
 const FieldLabel = styled(Label)`
@@ -41,7 +41,7 @@ const FieldError = styled(InlineError)`
 const TextField = forwardRef(
   (
     { labelHidden, label, multiline, error, id, ...props }: TextFieldProps,
-    ref
+    ref,
   ) => {
     const labelId = `${id}-label`;
     return (
@@ -50,7 +50,7 @@ const TextField = forwardRef(
           {label}
         </FieldLabel>
         <StyledTextField
-          as={multiline ? "textarea" : "input"}
+          as={multiline ? 'textarea' : 'input'}
           rows={multiline || null}
           ref={ref}
           id={id}
@@ -61,7 +61,7 @@ const TextField = forwardRef(
         {error && <FieldError message={error} />}
       </div>
     );
-  }
+  },
 );
 
 export default TextField;

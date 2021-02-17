@@ -72,7 +72,7 @@ export function MagicScriptTag() {
     JSON.stringify(COLORS),
   );
 
-  let codeToRunOnClient = `(${functionString})()`;
+  const codeToRunOnClient = `(${functionString})()`;
 
   // eslint-disable-next-line react/no-danger
   return <script dangerouslySetInnerHTML={{ __html: codeToRunOnClient }} />;
