@@ -59,7 +59,7 @@ export default function Steps(props: StepsProps) {
   const { steps } = props;
   return (
     <StyledList>
-      {steps.map(({ label, id }, idx) => (
+      {steps.map(({ label, id }) => (
         <StyledListItem key={id}>
           <Link href={`#${id}`} native>
             {label}

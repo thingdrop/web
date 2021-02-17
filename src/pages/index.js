@@ -21,8 +21,8 @@ export default function Home({ posts }) {
   );
 }
 
-export async function getServerSideProps(context) {
-  const { params } = context;
+export async function getServerSideProps() {
+  // const { params } = context;
 
   const res = await fetch('https://jsonplaceholder.typicode.com/posts');
   const posts = await res.json();

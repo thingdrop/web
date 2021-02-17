@@ -3,7 +3,7 @@ import { COLORS } from '@/constants';
 
 const defaultState = {
   colorMode: undefined,
-  setColorMode: (theme: string) => {},
+  setColorMode: undefined,
 };
 
 export const ThemeContext = createContext(defaultState);
@@ -74,7 +74,7 @@ export function MagicScriptTag() {
 
   const codeToRunOnClient = `(${functionString})()`;
 
-  // eslint-disable-next-line react/no-danger
+  // xeslint-disable-next-line react/no-danger
   return <script dangerouslySetInnerHTML={{ __html: codeToRunOnClient }} />;
 }
 

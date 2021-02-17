@@ -15,7 +15,7 @@ const StyledButton = styled.div`
 `;
 
 type ButtonProps = {
-  onClick?: () => {};
+  onClick?: () => void;
   children: any;
   href?: string;
   type?: string;

@@ -36,19 +36,6 @@ const UploadArea = styled.div`
   }
 `;
 
-const FileEntry = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: var(--spacing-tight) 0;
-  padding: var(--spacing-medium);
-  border-radius: var(--border-radius-medium);
-  transition: background var(--timing-fast);
-  :hover {
-    background: var(--color-background-secondary);
-  }
-`;
-
 const uploadMessage = 'Drag and drop one or more files, or click to upload.';
 
 type FileFieldProps = {
@@ -56,17 +43,16 @@ type FileFieldProps = {
   name: string;
   id: string;
   multiple?: boolean;
-  onClick?: () => {};
+  onClick?: () => void;
   onChange: (files: any[]) => void;
   onError: (error: any) => void;
-  children?: any;
   error?: string;
 };
 
 const FileField = forwardRef((props: FileFieldProps, ref: any) => {
   const [isDragging, setDragging] = useState(false);
 
-  const { name, id, multiple, children, error, onChange, onError } = props;
+  const { name, id, multiple, error, onChange, onError } = props;
 
   const labelId = `${id}-label`;
 
