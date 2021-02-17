@@ -10,13 +10,12 @@ const List = styled.ul`
 `;
 
 type GridProps = {
-  items: any[];
   children: any[];
 };
 
-export default function Grid({ children, ...props }: GridProps) {
+export default function Grid({ children }: GridProps) {
   return (
-    <List {...props}>
+    <List>
       {children &&
         children.map((item) => {
           const { children } = item.props;

@@ -12,7 +12,7 @@ export default function FourOhFour() {
   return (
     <CenteredMain>
       <div>
-        <Heading level={1}>404 | We couldn't find that page</Heading>
+        <Heading level={1}>404 | We couldn&apos;t find that page</Heading>
         Who sent you here? <Link href="/">Go home</Link>
       </div>
     </CenteredMain>
