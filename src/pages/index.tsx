@@ -26,7 +26,7 @@ export default function Home() {
           <title>Thingdrop | Find and share 3D models!</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <Grid items={models}>
+        <Grid>
           {models.map((model) => {
             return <div key={model.id}>{model.name}</div>;
           })}
