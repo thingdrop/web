@@ -1,19 +1,20 @@
 import { Layout } from "../components";
 
-export default function Model(props) {
-  const { id } = props;
+export default function Results(props) {
+  const { query } = props;
+  const { search } = query;
   return (
     <Layout>
-      <h2>Model ID: {id}</h2>
+      <h2>Model Search: {search}</h2>
     </Layout>
   );
 }
 
 export async function getServerSideProps(context) {
-  const { params } = context;
+  const { query } = context;
   return {
     props: {
-      ...params,
+      query,
     },
   };
 }

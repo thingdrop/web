@@ -1,12 +1,12 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const StyledButton = styled.div`
   cursor: pointer;
   background: var(--color-primary);
   color: var(--color-text-inverted);
-  border-radius: 3px;
+  border-radius: var(--border-radius-medium);
   padding: var(--spacing-tight) var(--spacing-medium);
-  font-size: var(--font-size-small);
+  font-size: var(--font-size-smaller);
   font-family: var(--font-body);
   font-weight: var(--font-weight-medium);
   text-decoration: none;
@@ -14,9 +14,18 @@ const StyledButton = styled.div`
   border: none;
 `;
 
-export default function Button({ children, href, ...rest }) {
-  const element = href ? 'a' : 'button';
+type ButtonProps = {
+  onClick?: () => {};
+  children: any;
+  href?: string;
+  type?: string;
+};
+
+export default function Button({ children, href, type, ...rest }: ButtonProps) {
+  const element = href ? "a" : "button";
   return (
-    <StyledButton as={element} href={href} {...rest}>{children}</StyledButton>
-  )
+    <StyledButton type={type || "button"} as={element} href={href} {...rest}>
+      {children}
+    </StyledButton>
+  );
 }

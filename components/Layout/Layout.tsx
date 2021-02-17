@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import Navbar from '../Navbar';
+import styled from "styled-components";
+import Navbar from "../Navbar";
 
 const Wrapper = styled.div`
   display: grid;
@@ -11,6 +11,9 @@ const Wrapper = styled.div`
   > * {
     grid-column: 2;
   }
+
+  margin-top: var(--spacing-loosest);
+
   .full-bleed {
     width: 100%;
     grid-column: 1 / -1;

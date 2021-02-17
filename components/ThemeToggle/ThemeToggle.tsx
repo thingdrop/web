@@ -1,8 +1,8 @@
-import { useContext } from 'react';
-import styled from 'styled-components';
-import { ThemeContext } from '../../constants/theme';
-import { Moon } from '@styled-icons/boxicons-solid';
-import { Sun } from '@styled-icons/open-iconic';
+import { useContext } from "react";
+import styled from "styled-components";
+import { ThemeContext } from "../../constants/theme";
+import { Moon } from "@styled-icons/boxicons-solid";
+import { Sun } from "@styled-icons/open-iconic";
 
 const IconButton = styled.button`
   cursor: pointer;
@@ -10,7 +10,7 @@ const IconButton = styled.button`
   color: var(--color-text);
   border: none;
   background: none;
-  padding: var(--spacing-extra-tight);
+  padding: var(--spacing-tighter);
 `;
 
 export default function ThemeToggle() {
@@ -20,12 +20,13 @@ export default function ThemeToggle() {
     return null;
   }
 
-  const Icon = colorMode === 'light' ? Moon : Sun;
-  const label = `Active ${colorMode === 'light' ? 'dark' : 'light'} mode`
+  const Icon = colorMode === "light" ? Moon : Sun;
+  const label = `Active ${colorMode === "light" ? "dark" : "light"} mode`;
   return (
-    <IconButton onClick={() => {
-      setColorMode(colorMode === 'light' ? 'dark' : 'light')
-    }}
+    <IconButton
+      onClick={() => {
+        setColorMode(colorMode === "light" ? "dark" : "light");
+      }}
       aria-label={label}
       title={label}
     >
@@ -45,4 +46,4 @@ export default function ThemeToggle() {
   //     Dark
   //   </label>
   // );
-};
+}

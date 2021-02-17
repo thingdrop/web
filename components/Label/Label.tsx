@@ -1,13 +1,35 @@
-import styled from 'styled-components';
+import { forwardRef } from "react";
+import styled from "styled-components";
 
 const StyledLabel = styled.label`
-  display: block;
+  display: flex;
+  align-items: center;
   color: var(--color-text);
   font-size: var(--font-size-small);
 `;
 
-export default function Label({ children, hidden, ...props }) {
-  return (
-    <StyledLabel {...props} className={hidden && 'sr-only'}>{children}</StyledLabel>
-  );
-}
+type LabelProps = {
+  id: string | number;
+  htmlFor: string | number;
+  children: any;
+  hidden?: boolean;
+  tabIndex?: number;
+  className?: string;
+  style?: any;
+};
+
+const Label = forwardRef(
+  ({ children, hidden, className, ...props }: LabelProps, ref) => {
+    return (
+      <StyledLabel
+        {...props}
+        className={[className, hidden && "sr-only"]}
+        ref={ref}
+      >
+        {children}
+      </StyledLabel>
+    );
+  }
+);
+
+export default Label;

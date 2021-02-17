@@ -1,5 +1,5 @@
 {
-  "name": "web",
+  "name": "@thingdrop/web",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -11,6 +11,7 @@
     "next": "10.0.6",
     "react": "17.0.1",
     "react-dom": "17.0.1",
+    "react-hook-form": "^6.15.1",
     "sass": "^1.32.6",
     "styled-components": "^5.2.1",
     "styled-icons": "^10.27.0",
