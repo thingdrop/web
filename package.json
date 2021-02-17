@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ./src --fix"
+    "lint": "eslint ./src --fix",
+    "test": "npm run lint"
   },
   "dependencies": {
     "next": "10.0.6",
