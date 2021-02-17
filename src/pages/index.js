@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { Layout, Grid } from "../components";
+import { Layout, Grid } from "@/components";
 import styled from "styled-components";
 
 const Footer = styled.footer`

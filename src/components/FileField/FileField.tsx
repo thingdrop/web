@@ -1,9 +1,9 @@
-import { forwardRef, useEffect, useRef, useState } from "react";
+import { forwardRef, useState } from "react";
 import styled from "styled-components";
 import Label from "../Label";
 import { CloudUploadOutline as UploadIcon } from "@styled-icons/evaicons-outline";
 import InlineError from "../InlineError";
-import { fileType } from "../../utils";
+import { fileType } from "@/utils";
 
 const HiddenInput = styled.input`
   top: 0;

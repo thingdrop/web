@@ -7,7 +7,7 @@ import {
   BORDER,
   BORDER_RADIUS,
   TIMING,
-} from "../../constants";
+} from "@/constants";
 
 const GlobalStyle = createGlobalStyle`
   html {

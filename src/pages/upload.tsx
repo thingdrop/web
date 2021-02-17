@@ -13,8 +13,8 @@ import {
   FormFields,
   Steps,
   VisuallyHidden,
-} from "../components";
-import { fileSize } from "../utils";
+} from "@/components";
+import { fileSize } from "@/utils";
 
 const validateFileList = (value: FileList) =>
   value.length > 0 || "You gotta upload at least one file.";

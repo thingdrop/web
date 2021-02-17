@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 import styled from "styled-components";
-import { TextField, Form, Button, ThemeToggle, Link } from "../../components";
+import { TextField, Form, Button, ThemeToggle, Link } from "@/components";
 
 const Header = styled.header`
   display: grid;
