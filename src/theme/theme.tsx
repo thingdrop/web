@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect } from 'react';
-import { COLORS } from './colors'
+import { COLORS } from '@/constants';
 
 const defaultState = {
   colorMode: undefined,
@@ -12,7 +12,7 @@ export const ThemeProvider = ({ children }) => {
   useEffect(() => {
     const root = window.document.documentElement;
     const initialColorValue = root.style.getPropertyValue(
-      '--initial-color-mode'
+      '--initial-color-mode',
     );
     rawSetColorMode(initialColorValue);
   }, []);
@@ -38,7 +38,6 @@ export const ThemeProvider = ({ children }) => {
 };
 
 export function setColorsByTheme() {
-
   function getInitialColorMode() {
     const persistedColorPreference = window.localStorage.getItem('color-mode');
     const hasPersistedPreference = typeof persistedColorPreference === 'string';
@@ -48,8 +47,8 @@ export function setColorsByTheme() {
       return persistedColorPreference;
     }
 
-    const mql = window.matchMedia('(prefers-color-scheme: dark)')
-    const prefersDarkFromMQ = mql.matches
+    const mql = window.matchMedia('(prefers-color-scheme: dark)');
+    const prefersDarkFromMQ = mql.matches;
     const colorMode = prefersDarkFromMQ ? 'dark' : 'light';
     return colorMode;
   }
@@ -57,26 +56,26 @@ export function setColorsByTheme() {
   const colors = '🌈';
   const colorMode = getInitialColorMode();
 
-  const root = document.documentElement
+  const root = document.documentElement;
 
   Object.entries(colors).forEach(([name, colorByTheme]) => {
-    const cssVarName = `--color-${name}`
+    const cssVarName = `--color-${name}`;
 
-    root.style.setProperty(cssVarName, colorByTheme[colorMode])
-  })
+    root.style.setProperty(cssVarName, colorByTheme[colorMode]);
+  });
   root.style.setProperty('--initial-color-mode', colorMode);
 }
 
 export function MagicScriptTag() {
   const functionString = String(setColorsByTheme).replace(
     "'🌈'",
-    JSON.stringify(COLORS)
-  )
+    JSON.stringify(COLORS),
+  );
 
-  let codeToRunOnClient = `(${functionString})()`
+  let codeToRunOnClient = `(${functionString})()`;
 
   // eslint-disable-next-line react/no-danger
-  return <script dangerouslySetInnerHTML={{ __html: codeToRunOnClient }} />
+  return <script dangerouslySetInnerHTML={{ __html: codeToRunOnClient }} />;
 }
 
 // if user doesn't have JavaScript enabled, set variables properly in a
@@ -84,12 +83,12 @@ export function MagicScriptTag() {
 export function FallbackStyles() {
   const cssVariableString = Object.entries(COLORS).reduce(
     (acc, [name, colorByTheme]) => {
-      return `${acc}\n--color-${name}: ${colorByTheme.light};`
+      return `${acc}\n--color-${name}: ${colorByTheme.light};`;
     },
-    ''
-  )
+    '',
+  );
 
-  const wrappedInSelector = `html { ${cssVariableString} }`
+  const wrappedInSelector = `html { ${cssVariableString} }`;
 
-  return <style>{wrappedInSelector}</style>
+  return <style>{wrappedInSelector}</style>;
 }

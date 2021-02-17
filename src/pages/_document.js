@@ -1,6 +1,6 @@
-import Document, { Html, Head, Main, NextScript } from "next/document";
-import { ServerStyleSheet } from "styled-components";
-import { FallbackStyles, MagicScriptTag } from "@/constants/theme";
+import Document, { Html, Head, Main, NextScript } from 'next/document';
+import { ServerStyleSheet } from 'styled-components';
+import { FallbackStyles, MagicScriptTag } from '@/theme';
 
 export default class MyDocument extends Document {
   static async getInitialProps(ctx) {
