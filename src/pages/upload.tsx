@@ -155,46 +155,6 @@ export default function Upload() {
                 error={errors.description && requiredMessage}
               />
 
-              <TextField
-                id="description"
-                name="description"
-                label="Description"
-                multiline={5}
-                fullWidth
-                ref={register({ required: true })}
-                error={errors.description && requiredMessage}
-              />
-
-              <TextField
-                id="description"
-                name="description"
-                label="Description"
-                multiline={5}
-                fullWidth
-                ref={register({ required: true })}
-                error={errors.description && requiredMessage}
-              />
-
-              <TextField
-                id="description"
-                name="description"
-                label="Description"
-                multiline={5}
-                fullWidth
-                ref={register({ required: true })}
-                error={errors.description && requiredMessage}
-              />
-
-              <TextField
-                id="description"
-                name="description"
-                label="Description"
-                multiline={5}
-                fullWidth
-                ref={register({ required: true })}
-                error={errors.description && requiredMessage}
-              />
-
               <Heading level={2} id="optionalFields">
                 Optional Fields
               </Heading>
