@@ -12,7 +12,7 @@ type RadioProps = {
   value: any;
 };
 
-const Radio = forwardRef(({ label, name, ...props }: RadioProps, ref) => {
+function Radio({ label, name, ...props }: RadioProps, ref) {
   const id = label.toLowerCase();
   const radioId = `checkbox-${id}`;
   const labelId = `${radioId}-label`;
@@ -29,6 +29,6 @@ const Radio = forwardRef(({ label, name, ...props }: RadioProps, ref) => {
       <span>{label}</span>
     </Label>
   );
-});
+}
 
-export default Radio;
+export default forwardRef(Radio);

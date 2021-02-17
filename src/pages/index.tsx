@@ -6,7 +6,12 @@ const Footer = styled.footer`
   background: var(--color-background-secondary);
   padding: var(--spacing-loosest);
 `;
-export default function Home({ posts }) {
+
+type HomeProps = {
+  posts: any[];
+};
+
+export default function Home({ posts }: HomeProps) {
   return (
     <Layout>
       <main className="full-bleed">

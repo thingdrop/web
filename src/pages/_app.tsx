@@ -2,7 +2,12 @@ import { ThemeProvider } from '@/theme';
 import { GlobalStyle } from '@/components';
 import '@/styles/reset.css';
 
-function App({ Component, pageProps }) {
+type AppProps = {
+  Component: any;
+  pageProps: any;
+};
+
+function App({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider>
       <GlobalStyle />

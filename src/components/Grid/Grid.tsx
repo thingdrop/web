@@ -9,7 +9,11 @@ const List = styled.ul`
   grid-auto-flow: dense;
 `;
 
-export default function Grid({ items, ...props }) {
+type GridProps = {
+  items: any[];
+};
+
+export default function Grid({ items, ...props }: GridProps) {
   return (
     <List {...props}>
       {items && items.map((item) => <li key={item.id}>{item.title}</li>)}

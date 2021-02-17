@@ -25,7 +25,7 @@ type HeadingProps = {
   id?: string | number;
 };
 
-const Heading = forwardRef(({ children, ...props }: HeadingProps, ref) => {
+function Heading({ children, ...props }: HeadingProps, ref) {
   const { level } = props;
   const headingTag = `h${level}`;
   return (
@@ -33,6 +33,6 @@ const Heading = forwardRef(({ children, ...props }: HeadingProps, ref) => {
       {children}
     </StyledHeading>
   );
-});
+}
 
-export default Heading;
+export default forwardRef(Heading);

@@ -24,7 +24,7 @@ const Legend = styled.legend`
   margin-bottom: var(--spacing-tight);
 `;
 
-const ChoiceList = forwardRef((props: ChoiceListProps, ref) => {
+function ChoiceList(props: ChoiceListProps, ref) {
   const { name, label, options, multiple } = props;
   const Input = multiple ? Checkbox : Radio;
   return (
@@ -42,5 +42,6 @@ const ChoiceList = forwardRef((props: ChoiceListProps, ref) => {
       ))}
     </fieldset>
   );
-});
-export default ChoiceList;
+}
+
+export default forwardRef(ChoiceList);

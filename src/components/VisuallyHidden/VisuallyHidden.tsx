@@ -11,7 +11,11 @@ const Hidden = styled.div`
   border: 0;
 `;
 
-const VisuallyHidden = ({ children, ...props }) => (
+type VisuallyHiddenProps = {
+  children: any;
+};
+
+const VisuallyHidden = ({ children, ...props }: VisuallyHiddenProps) => (
   <Hidden {...props}>{children}</Hidden>
 );
 

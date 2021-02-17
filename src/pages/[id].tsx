@@ -1,6 +1,10 @@
 import { Layout } from '@/components';
 
-export default function Model(props) {
+type ModelProps = {
+  id: string;
+};
+
+export default function Model(props: ModelProps) {
   const { id } = props;
   return (
     <Layout>

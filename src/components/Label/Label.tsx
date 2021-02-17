@@ -18,18 +18,16 @@ type LabelProps = {
   style?: any;
 };
 
-const Label = forwardRef(
-  ({ children, hidden, className, ...props }: LabelProps, ref) => {
-    return (
-      <StyledLabel
-        {...props}
-        className={[className, hidden && 'sr-only']}
-        ref={ref}
-      >
-        {children}
-      </StyledLabel>
-    );
-  },
-);
+function Label({ children, hidden, className, ...props }: LabelProps, ref) {
+  return (
+    <StyledLabel
+      {...props}
+      className={[className, hidden && 'sr-only']}
+      ref={ref}
+    >
+      {children}
+    </StyledLabel>
+  );
+}
 
-export default Label;
+export default forwardRef(Label);

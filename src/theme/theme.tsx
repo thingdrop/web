@@ -7,7 +7,12 @@ const defaultState = {
 };
 
 export const ThemeContext = createContext(defaultState);
-export const ThemeProvider = ({ children }) => {
+
+type ThemeProviderProps = {
+  children: any;
+};
+
+export const ThemeProvider = ({ children }: ThemeProviderProps) => {
   const [colorMode, rawSetColorMode] = useState(undefined);
   useEffect(() => {
     const root = window.document.documentElement;

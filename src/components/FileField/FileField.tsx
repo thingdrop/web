@@ -49,7 +49,7 @@ type FileFieldProps = {
   error?: string;
 };
 
-const FileField = forwardRef((props: FileFieldProps, ref: any) => {
+function FileField(props: FileFieldProps, ref: any) {
   const [isDragging, setDragging] = useState(false);
 
   const { name, id, multiple, error, onChange, onError } = props;
@@ -129,6 +129,6 @@ const FileField = forwardRef((props: FileFieldProps, ref: any) => {
       {error && <FieldError message={error} />}
     </Label>
   );
-});
+}
 
-export default FileField;
+export default forwardRef(FileField);

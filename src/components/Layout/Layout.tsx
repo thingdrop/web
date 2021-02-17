@@ -19,7 +19,12 @@ const Wrapper = styled.div`
     grid-column: 1 / -1;
   }
 `;
-export default function Layout({ children }) {
+
+type LayoutProps = {
+  children: any;
+};
+
+export default function Layout({ children }: LayoutProps) {
   return (
     <>
       <Navbar></Navbar>

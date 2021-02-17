@@ -38,30 +38,28 @@ const FieldError = styled(InlineError)`
   margin-top: 0.5em;
 `;
 
-const TextField = forwardRef(
-  (
-    { labelHidden, label, multiline, error, id, ...props }: TextFieldProps,
-    ref,
-  ) => {
-    const labelId = `${id}-label`;
-    return (
-      <div>
-        <FieldLabel id={labelId} htmlFor={id} hidden={labelHidden}>
-          {label}
-        </FieldLabel>
-        <StyledTextField
-          as={multiline ? 'textarea' : 'input'}
-          rows={multiline || null}
-          ref={ref}
-          id={id}
-          aria-labelledby={labelId}
-          error={error}
-          {...props}
-        />
-        {error && <FieldError message={error} />}
-      </div>
-    );
-  },
-);
+function TextField(
+  { labelHidden, label, multiline, error, id, ...props }: TextFieldProps,
+  ref,
+) {
+  const labelId = `${id}-label`;
+  return (
+    <div>
+      <FieldLabel id={labelId} htmlFor={id} hidden={labelHidden}>
+        {label}
+      </FieldLabel>
+      <StyledTextField
+        as={multiline ? 'textarea' : 'input'}
+        rows={multiline || null}
+        ref={ref}
+        id={id}
+        aria-labelledby={labelId}
+        error={error}
+        {...props}
+      />
+      {error && <FieldError message={error} />}
+    </div>
+  );
+}
 
-export default TextField;
+export default forwardRef(TextField);

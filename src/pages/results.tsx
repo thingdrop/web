@@ -1,6 +1,10 @@
 import { Layout } from '@/components';
 
-export default function Results(props) {
+type ResultsProps = {
+  query: any;
+};
+
+export default function Results(props: ResultsProps) {
   const { query } = props;
   const { search } = query;
   return (

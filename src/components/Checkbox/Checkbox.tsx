@@ -13,7 +13,7 @@ type CheckboxProps = {
   value?: any;
 };
 
-const Checkbox = forwardRef(({ label, id, ...props }: CheckboxProps, ref) => {
+function Checkbox({ label, id, ...props }: CheckboxProps, ref) {
   const labelId = `${id}-label`;
   return (
     <Label id={labelId} htmlFor={id}>
@@ -27,6 +27,6 @@ const Checkbox = forwardRef(({ label, id, ...props }: CheckboxProps, ref) => {
       <span>{label}</span>
     </Label>
   );
-});
+}
 
-export default Checkbox;
+export default forwardRef(Checkbox);
