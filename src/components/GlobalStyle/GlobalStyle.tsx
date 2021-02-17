@@ -62,6 +62,10 @@ const GlobalStyle = createGlobalStyle`
     font-family: var(--font-body);
   }
 
+  #__next {
+    height: 100%;
+  }
+
   .sr-only {
     position: absolute;
     width: 1px;

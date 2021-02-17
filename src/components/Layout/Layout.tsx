@@ -5,7 +5,7 @@ const Wrapper = styled.div`
   display: grid;
   grid-template-columns:
     1fr
-    min(80ch, calc(100% - 64px))
+    min(100ch, calc(100% - 64px))
     1fr;
   grid-column-gap: 32px;
   > * {
