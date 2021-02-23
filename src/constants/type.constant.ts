@@ -1,5 +1,6 @@
 export const FONT = {
-  body: '"Rubik", sans-serif',
+  body:
+    '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";',
   heading: '"Rubik", sans-serif',
   monospace: 'SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace',
 };

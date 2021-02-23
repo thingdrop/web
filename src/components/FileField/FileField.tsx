@@ -4,6 +4,7 @@ import Label from '../Label';
 import { CloudUploadOutline as UploadIcon } from '@styled-icons/evaicons-outline';
 import InlineError from '../InlineError';
 import { fileType } from '@/utils';
+import { outline } from '@/constants';
 
 const HiddenInput = styled.input`
   top: 0;
@@ -14,6 +15,9 @@ const FieldError = styled(InlineError)`
 `;
 
 const UploadArea = styled.div`
+  :focus-within {
+    ${outline}
+  }
   width: 100%;
   text-align: center;
   position: relative;

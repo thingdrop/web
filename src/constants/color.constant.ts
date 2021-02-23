@@ -11,6 +11,10 @@ export const COLORS = {
     light: '#4a4a4a',
     dark: '#fafafa',
   },
+  'text-secondary': {
+    light: '#8a8a8a',
+    dark: '#dadada',
+  },
   'text-inverted': {
     light: 'white',
     dark: 'white',
@@ -30,5 +34,9 @@ export const COLORS = {
   error: {
     light: 'tomato',
     dark: 'tomato',
+  },
+  outline: {
+    light: '#4D90FE',
+    dark: '#4D90FE',
   },
 };

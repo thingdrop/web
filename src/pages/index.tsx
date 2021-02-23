@@ -10,6 +10,7 @@ const Footer = styled.footer`
 
 export default function Home() {
   const [models, setModels] = useState([]);
+
   useEffect(() => {
     async function fetchModels() {
       const res = await fetch('http://localhost:8080/models');

@@ -13,17 +13,30 @@ import {
   FormFields,
   Steps,
   VisuallyHidden,
+  Select,
 } from '@/components';
-import { fileSize } from '@/utils';
+import { fetcher, fileSize } from '@/utils';
+import { useState } from 'react';
+
+const errorMessage = (fieldError) => {
+  return fieldError?.message;
+};
 
 const validateFileList = (value: FileList) =>
   value.length > 0 || 'You gotta upload at least one file.';
 
 type UploadFields = {
+  files: FileList;
   name: string;
   description: string;
   canDownload: boolean;
-  files: FileList;
+  filamentType: string;
+  infill: number | null;
+  printTemp: number;
+  resolution: number;
+  supportType: string;
+  supportLocation: string;
+  license: string;
 };
 
 const requiredMessage = 'This field is required';
@@ -72,12 +85,80 @@ export default function Upload() {
     setValue,
     setError,
     clearErrors,
-  } = useForm<UploadFields>();
+  } = useForm<UploadFields>({
+    defaultValues: {
+      supportType: 'NONE',
+    },
+  });
+
+  const [it, setIt] = useState([]);
 
   const fileList = watch('files');
   const fileOptions = fileListToOptions(fileList);
 
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = async (data) => {
+    console.log({ data });
+    const { files: fileList, primaryFile, ...createModelDto } = data;
+    const files: File[] = Array.from(fileList);
+
+    const parsedDto = Object.entries(createModelDto).reduce((acc, pair) => {
+      console.log({ acc, pair });
+      const [key, value] = pair;
+      if (
+        ['filamentType', 'license'].includes(key) &&
+        typeof value === 'string' &&
+        !value.length
+      ) {
+        acc[key] = null;
+      } else {
+        acc[key] = value;
+      }
+      return acc;
+    }, {});
+    const createModelResponse = await fetcher.post('/models', parsedDto);
+    console.log({ createModelResponse });
+    const { id, uploadToken } = createModelResponse.data;
+
+    const createFilesDto = {
+      files: files.map(({ name, size }) => ({
+        name,
+        size,
+        isPrimary: name === primaryFile,
+      })),
+    };
+    const createFilesResponse = await fetcher.post(
+      `/models/${id}/files`,
+      createFilesDto,
+      {
+        headers: {
+          Authorization: `Bearer ${uploadToken}`,
+        },
+      },
+    );
+    console.log({ createFilesResponse });
+    const { data: registeredFiles } = createFilesResponse;
+    await Promise.all(
+      registeredFiles.map(({ name, contentType, postPolicy }) => {
+        const { url, fields } = postPolicy;
+        const file = files.find((f) => f.name === name);
+
+        const formData = new FormData();
+        formData.append('Content-Type', contentType);
+
+        Object.entries(fields).forEach(([k, v]: [string, any]) => {
+          formData.append(k, v);
+        });
+        formData.append('file', file);
+        return fetcher.post(url, formData, {
+          onUploadProgress: function (progressEvent) {
+            const { loaded, total } = progressEvent;
+            const progress = Math.round((loaded / total) * 100);
+            console.log(`Progress: ${progress}%`);
+          },
+        });
+      }),
+    );
+  };
 
   return (
     <Layout>
@@ -102,7 +183,7 @@ export default function Upload() {
           />
         </Sidebar>
         <Content>
-          <Form onSubmit={handleSubmit(onSubmit)}>
+          <Form onSubmit={handleSubmit(onSubmit)} noValidate>
             <VisuallyHidden>
               <Heading level={2} id="uploadModels">
                 Upload Models
@@ -120,9 +201,8 @@ export default function Upload() {
                 label="Upload files"
                 ref={register({ validate: validateFileList })}
                 multiple
-                error={errors.files?.message}
+                error={errorMessage(errors.files)}
               />
-
               {!!fileOptions.length && (
                 <ChoiceList
                   name="primaryFile"
@@ -131,39 +211,197 @@ export default function Upload() {
                   ref={register}
                 />
               )}
-
               <Heading level={2} id="basicInfo">
                 Basic Information
               </Heading>
 
               <TextField
+                minLength={4}
+                maxLength={20}
+                showCharacterCount
+                defaultValue="hi"
                 id="name"
                 name="name"
                 label="Name"
-                ref={register({ required: true })}
-                fullWidth
-                error={errors.name && requiredMessage}
+                ref={register({
+                  required: requiredMessage,
+                  minLength: {
+                    value: 4,
+                    message: 'Name must be at least 4 characters.',
+                  },
+                  maxLength: {
+                    value: 20,
+                    message: 'Name can only be 20 characters long.',
+                  },
+                })}
+                error={errorMessage(errors.name)}
               />
-
               <TextField
                 id="description"
                 name="description"
                 label="Description"
-                multiline={5}
+                showCharacterCount
+                multiline
                 fullWidth
-                ref={register({ required: true })}
-                error={errors.description && requiredMessage}
+                ref={register({ required: requiredMessage })}
+                error={errorMessage(errors.description)}
               />
-
               <Heading level={2} id="optionalFields">
                 Optional Fields
               </Heading>
 
               <Checkbox
-                id="optionalFields"
+                id="allowDownload"
                 name="canDownload"
                 label="Allow download"
                 ref={register}
+                defaultChecked={true}
+              />
+
+              <Select
+                name="filamentType"
+                label="Filament Type"
+                id="filamentType"
+                defaultValue={undefined}
+                options={[
+                  { label: 'ABS', value: 'ABS' },
+                  { label: 'PLA', value: 'PLA' },
+                  { label: 'SLA', value: 'SLA' },
+                  { label: 'Other', value: 'OTHER' },
+                ]}
+                ref={register}
+              />
+
+              <TextField
+                id="infill"
+                name="infill"
+                label="Infill (%)"
+                type="number"
+                min={0}
+                max={100}
+                suffix="%"
+                ref={register({
+                  valueAsNumber: true,
+                  min: {
+                    value: 0,
+                    message: 'Value cannot be negative.',
+                  },
+                  max: {
+                    value: 100,
+                    message: 'Value cannot be greater than 100%',
+                  },
+                })}
+                error={errorMessage(errors.infill)}
+              />
+              <TextField
+                id="printTemperature"
+                name="printTemp"
+                label="Print Temperature"
+                type="number"
+                suffix="℉"
+                min={0}
+                max={1000}
+                ref={register({
+                  valueAsNumber: true,
+                  min: {
+                    value: 0,
+                    message: 'Value cannot be negative.',
+                  },
+                  max: {
+                    value: 1000,
+                    message: 'Value cannot be greater than 1000',
+                  },
+                })}
+                error={errorMessage(errors.printTemp)}
+              />
+
+              <TextField
+                id="resolution"
+                name="resolution"
+                label="Resolution"
+                type="number"
+                suffix="mm"
+                min={0}
+                max={2}
+                ref={register({
+                  valueAsNumber: true,
+                  min: {
+                    value: 0,
+                    message: 'Value cannot be negative.',
+                  },
+                  max: {
+                    value: 2,
+                    message: 'Value cannot be greater than 1000',
+                  },
+                })}
+                error={errorMessage(errors.resolution)}
+              />
+
+              <FormFields.Group label="Supports" inline>
+                <Select
+                  name="supportType"
+                  label="Support Type"
+                  id="supportType"
+                  defaultValue="NONE"
+                  options={[
+                    { label: 'None', value: 'NONE' },
+                    { label: 'Lines', value: 'LINES' },
+                    { label: 'Grid', value: 'GRID' },
+                    {
+                      label: 'Triangles',
+                      value: 'TRIANGLES',
+                    },
+                    { label: 'Concentric', value: 'CONCENTRIC' },
+                    { label: 'Zigzag', value: 'ZIGZAG' },
+                    { label: 'Cross', value: 'CROSS' },
+                    { label: 'Gyroid', value: 'GYROID' },
+                  ]}
+                  ref={register}
+                />
+                {watch('supportType') !== 'NONE' && (
+                  <Select
+                    name="supports"
+                    label="Support Location"
+                    id="supports"
+                    options={[
+                      { label: 'None', value: 'NONE' },
+                      { label: 'Everywhere', value: 'EVERYWHERE' },
+                      {
+                        label: 'Touching Buildplate',
+                        value: 'TOUCHING_BUILDPLATE',
+                      },
+                    ]}
+                    ref={register}
+                  />
+                )}
+              </FormFields.Group>
+
+              <Select
+                name="license"
+                label="License"
+                id="license"
+                options={[
+                  { label: 'BSD', value: 'BSD' },
+                  { label: 'MIT', value: 'MIT' },
+                  { label: 'Unlicensed', value: 'UNLICENSED' },
+                ]}
+                ref={register}
+              />
+
+              <ChoiceList
+                name="prim"
+                label="Prim"
+                defaultChecked={['MIT']}
+                // selected={it}
+                // onChange={(e) => {
+                //   console.log(e.target.value);
+                //   setIt([e.target.value]);
+                // }}
+                options={[
+                  { label: 'BSD', value: 'BSD' },
+                  { label: 'MIT', value: 'MIT' },
+                  { label: 'Unlicensed', value: 'UNLICENSED' },
+                ]}
               />
 
               <Button type="submit">Create Model</Button>
