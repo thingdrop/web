@@ -16,7 +16,6 @@ import {
   Select,
 } from '@/components';
 import { fetcher, fileSize } from '@/utils';
-import { useState } from 'react';
 
 const errorMessage = (fieldError) => {
   return fieldError?.message;
@@ -90,8 +89,6 @@ export default function Upload() {
       supportType: 'NONE',
     },
   });
-
-  const [it, setIt] = useState([]);
 
   const fileList = watch('files');
   const fileOptions = fileListToOptions(fileList);
@@ -386,22 +383,6 @@ export default function Upload() {
                   { label: 'Unlicensed', value: 'UNLICENSED' },
                 ]}
                 ref={register}
-              />
-
-              <ChoiceList
-                name="prim"
-                label="Prim"
-                defaultChecked={['MIT']}
-                // selected={it}
-                // onChange={(e) => {
-                //   console.log(e.target.value);
-                //   setIt([e.target.value]);
-                // }}
-                options={[
-                  { label: 'BSD', value: 'BSD' },
-                  { label: 'MIT', value: 'MIT' },
-                  { label: 'Unlicensed', value: 'UNLICENSED' },
-                ]}
               />
 
               <Button type="submit">Create Model</Button>
