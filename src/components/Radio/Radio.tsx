@@ -36,11 +36,10 @@ type RadioProps = {
   value: any;
   checked?: boolean;
   onChange?: (e: any) => void;
-  defaultChecked?: boolean;
 };
 
 function Radio(props: RadioProps, ref) {
-  const { label, checked, name, defaultChecked, ...delegated } = props;
+  const { label, checked, name, ...delegated } = props;
   const id = label.toLowerCase();
   const radioId = `checkbox-${id}`;
   const labelId = `${radioId}-label`;
@@ -49,7 +48,6 @@ function Radio(props: RadioProps, ref) {
     <Label id={labelId} htmlFor={radioId} style={{ position: 'relative' }}>
       <HiddenRadio
         checked={checked}
-        defaultChecked={defaultChecked}
         name={name}
         ref={ref}
         id={radioId}

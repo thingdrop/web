@@ -78,7 +78,9 @@ function ChoiceList(props: ChoiceListProps, ref) {
         <Option key={option.value}>
           <Input
             checked={getCheckedState(selected, localSelected, option.value)}
-            defaultChecked={defaultChecked?.includes(option.value)}
+            defaultChecked={
+              multiple ? defaultChecked?.includes(option.value) : undefined
+            }
             onChange={handleChange}
             label={option.label}
             name={name}
