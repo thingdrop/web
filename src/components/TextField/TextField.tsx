@@ -15,6 +15,7 @@ const getRows = (multiline) => {
 const StyledWrapper = styled.div`
   :focus-within {
     ${outline}
+    background: var(--color-secondary)
   }
   display: flex;
   position: relative;
@@ -41,6 +42,9 @@ const StyledTextField = styled.div`
   color: var(--color-text);
   resize: none;
   max-height: 60vh;
+  :focus {
+    background: var(--color-secondary);
+  }
 `;
 
 const Prefix = styled.div`

@@ -4,12 +4,12 @@ export const COLORS = {
     dark: '#191E29',
   },
   'background-secondary': {
-    light: '#eaeaea',
+    light: '#F4F4F8',
     dark: '#2d364a',
   },
   text: {
     light: '#4a4a4a',
-    dark: '#fafafa',
+    dark: '#F4F4F8',
   },
   'text-secondary': {
     light: '#8a8a8a',
@@ -20,12 +20,12 @@ export const COLORS = {
     dark: 'white',
   },
   primary: {
-    light: '#DE3F5C',
-    dark: '#DE3F5C',
+    light: '#fe4a49',
+    dark: '#fe4a49',
   },
   secondary: {
-    light: '#eaeaea',
-    dark: '#2d364a',
+    light: '#DEDEE3',
+    dark: '#3E4A65',
   },
   link: {
     light: '#555',

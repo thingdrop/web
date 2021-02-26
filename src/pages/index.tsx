@@ -3,15 +3,15 @@ import { Layout, Grid } from '@/components';
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 
-const Footer = styled.footer`
-  background: var(--color-background-secondary);
-  padding: var(--spacing-loosest);
-`;
-
 export default function Home() {
   const [models, setModels] = useState([]);
 
   useEffect(() => {
+    // const eventSource = new EventSource('http://localhost:8080/models/sse');
+    // eventSource.onmessage = ({ data }) => {
+    //   console.log('New message', JSON.parse(data));
+    // };
+
     async function fetchModels() {
       const res = await fetch('http://localhost:8080/models');
       const models = await res.json();
@@ -33,7 +33,6 @@ export default function Home() {
           })}
         </Grid>
       </main>
-      <Footer className="full-bleed">&copy; 2020 - Present</Footer>
     </Layout>
   );
 }
