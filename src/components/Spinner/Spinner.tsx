@@ -32,8 +32,14 @@ const StyledSpinner = styled.svg`
   }
 `;
 
-const Spinner = ({ className }) => (
-  <StyledSpinner className={className} viewBox="0 0 50 50" size={16}>
+type SpinnerProps = {
+  className?: any;
+  style?: any;
+  size?: number;
+};
+
+const Spinner = (props: SpinnerProps) => (
+  <StyledSpinner {...props} viewBox="0 0 50 50">
     <circle
       className="path"
       cx="25"

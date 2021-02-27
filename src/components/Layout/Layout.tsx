@@ -10,8 +10,8 @@ const Footer = styled.footer`
 
 const Wrapper = styled.div`
   display: grid;
-  min-height: 100%;
-  grid-template-rows: 1fr auto;
+  /* min-height: 100%; */
+  /* grid-template-rows: 1fr auto; */
   grid-template-columns:
     1fr
     min(100ch, calc(100% - 64px))
@@ -39,7 +39,7 @@ export default function Layout({ children }: LayoutProps) {
       <Navbar></Navbar>
       <Wrapper>
         {children}
-        <Footer className="full-bleed">&copy; 2020 - Present</Footer>
+        {/* <Footer className="full-bleed">&copy; 2020 - Present</Footer> */}
       </Wrapper>
     </>
   );

@@ -1,3 +1,6 @@
+import { useRouter } from 'next/router';
+import { useSelector, useDispatch } from 'react-redux';
+import { addUpload, updateUpload } from '@/store';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import debounce from 'lodash/debounce';
@@ -5,7 +8,6 @@ import { fetcher, fileSize } from '@/utils';
 import {
   Button,
   Card,
-  Heading,
   TextField,
   Form,
   Checkbox,
@@ -13,9 +15,6 @@ import {
   List,
   ChoiceList,
   FormFields,
-  Steps,
-  VisuallyHidden,
-  Select,
 } from '@/components';
 
 const errorMessage = (fieldError) => {
@@ -116,7 +115,7 @@ const createFormData = (fileMeta, fileList) => {
   return formData;
 };
 
-export default function UploadForm({ setProgress, setStatus, status }) {
+export default function UploadForm() {
   const {
     register,
     handleSubmit,
@@ -131,11 +130,14 @@ export default function UploadForm({ setProgress, setStatus, status }) {
     },
   });
 
+  const status = useSelector((state) => state.upload.status);
+  const router = useRouter();
+  const dispatch = useDispatch();
+
   const fileList = watch('fileList');
   const fileOptions = fileListToOptions(fileList);
 
   const onSubmit = async (formData) => {
-    setStatus('LOADING');
     console.log({ formData });
     const { files, fileList, ...model }: any = parseForm(formData);
     const createModelResponse = await fetcher.post('/models', model);
@@ -153,7 +155,11 @@ export default function UploadForm({ setProgress, setStatus, status }) {
 
     const { data: registeredFiles } = createFilesResponse;
 
-    await Promise.all(
+    registeredFiles.forEach((file) => {
+      dispatch(addUpload({ id: file.id }));
+    });
+
+    Promise.all(
       registeredFiles.map((registeredFile) => {
         const formData = createFormData(registeredFile, fileList);
         const { url } = registeredFile.postPolicy;
@@ -161,12 +167,22 @@ export default function UploadForm({ setProgress, setStatus, status }) {
           onUploadProgress: debounce((progressEvent) => {
             const { loaded, total } = progressEvent;
             const progress = Math.round((loaded / total) * 100);
-            setProgress(progress);
+
+            dispatch(updateUpload({ id: registeredFile.id, progress }));
           }, 100),
         });
       }),
-    );
-    setStatus('COMPLETE');
+    ).then((uploadResults: any) => {
+      uploadResults.forEach((result, idx) => {
+        if (result.status == 'rejected') {
+          dispatch(
+            updateUpload({ id: registeredFiles[idx].id, error: result.reason }),
+          );
+        }
+      });
+    });
+
+    router.push(`/${id}`);
   };
 
   return (
@@ -377,7 +393,7 @@ export default function UploadForm({ setProgress, setStatus, status }) {
               ref={register}
             /> */}
 
-            <Button type="submit" loading={status === 'LOADING'}>
+            <Button type="submit" loading={status === 'IN_PROGRESS'}>
               Create Model
             </Button>
           </FormFields>
