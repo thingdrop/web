@@ -31,7 +31,6 @@ export default function Model(props: ModelProps) {
   const { addToast } = useToast();
   const [status, setStatus] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
-  // const [filesProcessing, setFilesProcessing] = useState(false);
   const router = useRouter();
 
   const uploads = useSelector((state) => state.upload.uploads);
@@ -90,7 +89,7 @@ export default function Model(props: ModelProps) {
         eventSource.close();
       };
     }
-  }, [status, router]);
+  }, [status, model.id, router]);
 
   console.log({ uploadProgress });
   return (
