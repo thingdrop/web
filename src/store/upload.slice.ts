@@ -27,24 +27,6 @@ export const uploadSlice = createSlice({
         state.uploads[id].status = 'COMPLETE';
       }
     },
-    // setProgress: (state, action) => {
-    //   const { id, progress } = action.payload;
-    //   state.uploads[id] = progress;
-
-    //   const groupProgress = Object.values(state.uploads).reduce<number>(
-    //     (total: number, value: number) => total + value,
-    //     0,
-    //   );
-
-    //   const total = 100 * Object.keys(state.uploads).length;
-
-    //   const normalizedProgress = (groupProgress / total) * 100;
-    //   console.log({ groupProgress, total, normalizedProgress, state });
-    //   if (normalizedProgress === 100) {
-    //     state.status = 'COMPLETE';
-    //   }
-    //   state.progress = normalizedProgress;
-    // },
   },
 });
 

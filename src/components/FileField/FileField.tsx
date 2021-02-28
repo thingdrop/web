@@ -2,8 +2,9 @@ import { forwardRef, useState } from 'react';
 import styled from 'styled-components';
 import Label from '../Label';
 import { CloudUploadOutline as UploadIcon } from '@styled-icons/evaicons-outline';
+import { Cube as FileIcon } from '@styled-icons/boxicons-regular';
 import InlineError from '../InlineError';
-import { fileType } from '@/utils';
+import { fileSize, fileType } from '@/utils';
 import { outline } from '@/constants';
 
 const HiddenInput = styled.input`
@@ -42,11 +43,12 @@ const UploadArea = styled.div`
   }
 `;
 
-const uploadMessage = 'Drag and drop one or more files, or click to upload.';
+const uploadMessage = 'Drag and drop a file, or click to upload.';
 
 type FileFieldProps = {
   label: string;
   name: string;
+  file: any;
   id: string;
   multiple?: boolean;
   onClick?: () => void;
@@ -58,7 +60,7 @@ type FileFieldProps = {
 function FileField(props: FileFieldProps, ref: any) {
   const [isDragging, setDragging] = useState(false);
 
-  const { name, id, multiple, error, onChange, onError } = props;
+  const { name, id, multiple, error, onChange, onError, file } = props;
 
   const labelId = `${id}-label`;
 
@@ -128,10 +130,19 @@ function FileField(props: FileFieldProps, ref: any) {
             onChange={handleChange}
             ref={ref}
           />
-          <div>
-            <UploadIcon size={48} />
-            <p>{uploadMessage}</p>
-          </div>
+          {file && !isDragging ? (
+            <div>
+              <FileIcon size={48} />
+              <p>
+                {file.name.toLowerCase()} ({fileSize(file.size)})
+              </p>
+            </div>
+          ) : (
+            <div>
+              <UploadIcon size={48} />
+              <p>{uploadMessage}</p>
+            </div>
+          )}
         </UploadArea>
         {error && <FieldError message={error} />}
       </div>

@@ -4,7 +4,7 @@ import { addUpload, updateUpload } from '@/store';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import debounce from 'lodash/debounce';
-import { fetcher, fileSize } from '@/utils';
+import { fetcher } from '@/utils';
 import {
   Button,
   Card,
@@ -13,30 +13,34 @@ import {
   Checkbox,
   FileField,
   List,
-  ChoiceList,
   FormFields,
 } from '@/components';
+import { useState } from 'react';
+import { useToast } from '../Toast';
 
 const errorMessage = (fieldError) => {
   return fieldError?.message;
 };
 
-const validateFileList = (value: FileList) =>
-  value.length > 0 || 'You gotta upload at least one file.';
+const validateFileList = (value: FileList) => {
+  if (!value.length) {
+    return 'You gotta upload at least one file...';
+  }
+  return value.length === 1 || 'You can only upload one file at a time.';
+};
 
 type UploadFields = {
   fileList: FileList;
-  primaryFile: string;
   name: string;
   description: string;
   canDownload: boolean;
-  filamentType: string;
-  infill: number | null;
-  printTemp: number;
-  resolution: number;
-  supportType: string;
-  supportLocation: string;
-  license: string;
+  // filamentType: string;
+  // infill: number | null;
+  // printTemp: number;
+  // resolution: number;
+  // supportType: string;
+  // supportLocation: string;
+  // license: string;
 };
 
 const requiredMessage = 'This field is required';
@@ -68,43 +72,9 @@ const Content = styled.article`
   min-width: 40%;
 `;
 
-const fileListToOptions = (fileList: FileList | undefined) => {
-  if (!fileList) return [];
-  const fileArray = Array.from(fileList);
-  return fileArray.map((file) => {
-    const { name, size } = file;
-    return {
-      label: `${name} - ${fileSize(size)}`,
-      value: name,
-    };
-  });
-};
-
-const isEmptyString = (value) => typeof value === 'string' && !value.length;
-
-function parseForm(data: UploadFields) {
-  const { primaryFile, ...fields } = data;
-  return Object.entries(fields).reduce((parsedForm: any, [key, value]) => {
-    if (['filamentType', 'license'].includes(key) && isEmptyString(value)) {
-      parsedForm[key] = null;
-    } else if (key === 'fileList') {
-      parsedForm[key] = Array.from(value);
-      parsedForm.files = Array.from(value).map(({ name, size }) => ({
-        name,
-        size,
-        isPrimary: name === primaryFile,
-      }));
-    } else {
-      parsedForm[key] = value;
-    }
-    return parsedForm;
-  }, {});
-}
-
-const createFormData = (fileMeta, fileList) => {
-  const { name, contentType, postPolicy } = fileMeta;
+const createFormData = (fileMeta, file) => {
+  const { contentType, postPolicy } = fileMeta;
   const { fields } = postPolicy;
-  const file = fileList.find((f) => f.name === name);
   const formData = new FormData();
   formData.append('Content-Type', contentType);
 
@@ -119,33 +89,33 @@ export default function UploadForm() {
   const {
     register,
     handleSubmit,
-    watch,
     errors,
+    watch,
     setValue,
     setError,
     clearErrors,
-  } = useForm<UploadFields>({
-    defaultValues: {
-      supportType: 'NONE',
-    },
-  });
+  } = useForm<UploadFields>();
 
-  const status = useSelector((state) => state.upload.status);
+  const fileList = watch('fileList');
+  const file = fileList?.length === 1 ? fileList?.item(0) : null;
+
+  const [isSubmitting, setSubmitting] = useState(false);
+  const { addToast } = useToast();
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const fileList = watch('fileList');
-  const fileOptions = fileListToOptions(fileList);
+  const onSubmit = async (data: UploadFields) => {
+    setSubmitting(true);
+    const { fileList, ...model } = data;
+    const file = fileList.item(0);
+    const fileDto = { name: file.name, size: file.size };
 
-  const onSubmit = async (formData) => {
-    console.log({ formData });
-    const { files, fileList, ...model }: any = parseForm(formData);
     const createModelResponse = await fetcher.post('/models', model);
 
     const { id, uploadToken } = createModelResponse.data;
     const createFilesResponse = await fetcher.post(
-      `/models/${id}/files`,
-      { files },
+      `/models/${id}/file`,
+      fileDto,
       {
         headers: {
           Authorization: `Bearer ${uploadToken}`,
@@ -153,36 +123,30 @@ export default function UploadForm() {
       },
     );
 
-    const { data: registeredFiles } = createFilesResponse;
+    const { data: registeredFile } = createFilesResponse;
+    dispatch(addUpload({ id: registeredFile.id }));
 
-    registeredFiles.forEach((file) => {
-      dispatch(addUpload({ id: file.id }));
-    });
-
-    Promise.all(
-      registeredFiles.map((registeredFile) => {
-        const formData = createFormData(registeredFile, fileList);
-        const { url } = registeredFile.postPolicy;
-        return fetcher.post(url, formData, {
-          onUploadProgress: debounce((progressEvent) => {
-            const { loaded, total } = progressEvent;
-            const progress = Math.round((loaded / total) * 100);
-
-            dispatch(updateUpload({ id: registeredFile.id, progress }));
-          }, 100),
-        });
-      }),
-    ).then((uploadResults: any) => {
-      uploadResults.forEach((result, idx) => {
-        if (result.status == 'rejected') {
-          dispatch(
-            updateUpload({ id: registeredFiles[idx].id, error: result.reason }),
-          );
-        }
-      });
-    });
+    const formData = createFormData(registeredFile, file);
+    const { url } = registeredFile.postPolicy;
 
     router.push(`/${id}`);
+
+    try {
+      await fetcher.post(url, formData, {
+        onUploadProgress: debounce((progressEvent) => {
+          const { loaded, total } = progressEvent;
+          const progress = Math.round((loaded / total) * 100);
+
+          dispatch(updateUpload({ id: registeredFile.id, progress }));
+
+          if (progress === 100) {
+            addToast({ content: 'Upload complete!', duration: 5000 });
+          }
+        }, 100),
+      });
+    } catch (error) {
+      dispatch(updateUpload({ id: registeredFile.id, error }));
+    }
   };
 
   return (
@@ -218,24 +182,18 @@ export default function UploadForm() {
             <FileField
               id="upload"
               name="fileList"
+              file={file}
               onChange={(fileList) => {
                 clearErrors('fileList');
-                setValue('fileList', fileList, { shouldValidate: true });
+                setValue('fileList', fileList, {
+                  shouldValidate: true,
+                });
               }}
               onError={(error) => setError('fileList', error)}
               label="Upload files"
               ref={register({ validate: validateFileList })}
-              multiple
               error={errorMessage(errors.fileList)}
             />
-            {!!fileOptions.length && (
-              <ChoiceList
-                name="primaryFile"
-                label="Primary File"
-                options={fileOptions}
-                ref={register}
-              />
-            )}
             {/* <Heading level={2} id="basicInfo">
               Basic Information
             </Heading> */}
@@ -393,7 +351,11 @@ export default function UploadForm() {
               ref={register}
             /> */}
 
-            <Button type="submit" loading={status === 'IN_PROGRESS'}>
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              loading={isSubmitting}
+            >
               Create Model
             </Button>
           </FormFields>
