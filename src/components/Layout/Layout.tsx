@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 import Navbar from '../Navbar';
 
-const Footer = styled.footer`
-  background: var(--color-background-secondary);
-  padding: var(--spacing-loosest);
-  grid-row-start: 2;
-  grid-row-end: 3;
-`;
+// const Footer = styled.footer`
+//   background: var(--color-background-secondary);
+//   padding: var(--spacing-loosest);
+//   grid-row-start: 2;
+//   grid-row-end: 3;
+// `;
 
 const Wrapper = styled.div`
   display: grid;

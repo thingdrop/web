@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import styled from 'styled-components';
 import { Heading, Layout, UploadForm } from '@/components';
 
 export default function Upload() {

@@ -9,6 +9,10 @@ const Wrapper = styled.div`
   }
 `;
 
-export default function ButtonGroup({ children }) {
+type ButtonGroupProps = {
+  children: any;
+};
+
+export default function ButtonGroup({ children }: ButtonGroupProps) {
   return <Wrapper>{children}</Wrapper>;
 }

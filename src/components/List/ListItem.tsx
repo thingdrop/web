@@ -5,6 +5,10 @@ const StyledListItem = styled.li`
   line-height: 1.6;
 `;
 
-export default function ListItem({ children }) {
+type ListItemProps = {
+  children: any;
+};
+
+export default function ListItem({ children }: ListItemProps) {
   return <StyledListItem>{children}</StyledListItem>;
 }
