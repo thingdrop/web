@@ -12,7 +12,7 @@ const StyledListItem = styled.li`
   display: flex;
   align-items: center;
 
-  padding: 8px;
+  padding: var(--spacing-tight) var(--spacing-tight) var(--spacing-tight) 0;
   border-radius: var(--border-radius-medium);
 
   /* Text */

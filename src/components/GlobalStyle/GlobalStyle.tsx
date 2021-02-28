@@ -58,7 +58,7 @@ const GlobalStyle = createGlobalStyle`
   body {
     background: var(--color-background);
     color: var(--color-text);
-    transition: background var(--timing-fast) ease, color var(--timing-faster) ease;
+    transition: background var(--timing-faster) ease, color var(--timing-faster) ease;
     font-family: var(--font-body);
   }
 

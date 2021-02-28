@@ -14,7 +14,7 @@ const getFontVariable = ({ as }) => `var(--font-size-${headingSizeMap[as]})`;
 
 const StyledHeading = styled.div`
   font-size: ${getFontVariable};
-  margin-bottom: 0.5em;
+  margin-bottom: 0.8em;
   font-family: var(--font-heading);
   font-weight: 600;
 `;

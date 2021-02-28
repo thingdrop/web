@@ -1,15 +1,10 @@
 import Head from 'next/head';
 import { Layout, Grid } from '@/components';
-import styled from 'styled-components';
 import { useEffect, useState } from 'react';
-
-const Footer = styled.footer`
-  background: var(--color-background-secondary);
-  padding: var(--spacing-loosest);
-`;
 
 export default function Home() {
   const [models, setModels] = useState([]);
+
   useEffect(() => {
     async function fetchModels() {
       const res = await fetch('http://localhost:8080/models');
@@ -32,7 +27,6 @@ export default function Home() {
           })}
         </Grid>
       </main>
-      <Footer className="full-bleed">&copy; 2020 - Present</Footer>
     </Layout>
   );
 }

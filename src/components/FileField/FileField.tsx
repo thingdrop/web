@@ -4,6 +4,7 @@ import Label from '../Label';
 import { CloudUploadOutline as UploadIcon } from '@styled-icons/evaicons-outline';
 import InlineError from '../InlineError';
 import { fileType } from '@/utils';
+import { outline } from '@/constants';
 
 const HiddenInput = styled.input`
   top: 0;
@@ -14,19 +15,24 @@ const FieldError = styled(InlineError)`
 `;
 
 const UploadArea = styled.div`
+  :focus-within {
+    ${outline}
+  }
+  z-index: 10;
   width: 100%;
   text-align: center;
-  position: relative;
+  position: sticky;
   padding: calc(var(--spacing-loosest) * 4) var(--spacing-loosest);
   border: var(--border-medium) solid
     ${(p) => (p.error ? 'var(--color-error)' : 'var(--color-secondary)')};
   border-radius: var(--border-radius-medium);
-  transition: background var(--timing-fast);
+  transition: background var(--timing-fast), box-shadow var(--timing-fast);
   * {
     pointer-events: none;
   }
   &.drag {
     background: var(--color-primary);
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.6);
   }
   :hover {
     background: var(--color-background-secondary);
@@ -93,7 +99,7 @@ function FileField(props: FileFieldProps, ref: any) {
   const validateFile = (file) => {
     const validTypes = ['stl', 'obj', 'glb'];
     const extension = fileType(file.name);
-    return validTypes.includes(extension);
+    return validTypes.includes(extension.toLowerCase());
   };
 
   const toggleDrag = (e) => {
@@ -103,30 +109,32 @@ function FileField(props: FileFieldProps, ref: any) {
 
   return (
     <Label id={labelId} htmlFor={id} style={{ display: 'block' }}>
-      <UploadArea
-        onDragOver={silenceEvent}
-        onDragEnter={toggleDrag}
-        onDragLeave={toggleDrag}
-        onDrop={handleFileDrop}
-        error={error}
-        className={isDragging ? 'drag' : null}
-      >
-        <HiddenInput
-          className="sr-only"
-          id={id}
-          aria-labelledby={labelId}
-          name={name}
-          type="file"
-          multiple={multiple}
-          onChange={handleChange}
-          ref={ref}
-        />
-        <div>
-          <UploadIcon size={48} />
-          <p>{uploadMessage}</p>
-        </div>
-      </UploadArea>
-      {error && <FieldError message={error} />}
+      <div style={{ position: 'relative' }}>
+        <UploadArea
+          onDragOver={silenceEvent}
+          onDragEnter={toggleDrag}
+          onDragLeave={toggleDrag}
+          onDrop={handleFileDrop}
+          error={error}
+          className={isDragging ? 'drag' : null}
+        >
+          <HiddenInput
+            className="sr-only"
+            id={id}
+            aria-labelledby={labelId}
+            name={name}
+            type="file"
+            multiple={multiple}
+            onChange={handleChange}
+            ref={ref}
+          />
+          <div>
+            <UploadIcon size={48} />
+            <p>{uploadMessage}</p>
+          </div>
+        </UploadArea>
+        {error && <FieldError message={error} />}
+      </div>
     </Label>
   );
 }

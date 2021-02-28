@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import Spinner from '../Spinner';
+import ButtonGroup from './ButtonGroup';
 
 const StyledButton = styled.div`
   cursor: pointer;
@@ -11,21 +13,69 @@ const StyledButton = styled.div`
   font-weight: var(--font-weight-medium);
   text-decoration: none;
   line-height: normal;
-  border: none;
+  border: 1px solid var(--color-primary);
+`;
+
+const ButtonContent = styled.span`
+  position: relative;
+`;
+
+const ButtonChildren = styled.span`
+  opacity: ${(p) => (p.$loading ? 0 : 1)};
+`;
+
+const LoadingIcon = styled(Spinner)`
+  color: white;
+  position: absolute;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  text-align: center;
 `;
 
 type ButtonProps = {
-  onClick?: () => void;
+  onClick?: (e: any) => void;
   children: any;
   href?: string;
   type?: string;
+  disabled?: boolean;
+  loading?: boolean;
 };
 
-export default function Button({ children, href, type, ...rest }: ButtonProps) {
+function Button({
+  children,
+  href,
+  type,
+  loading,
+  onClick,
+  disabled,
+  ...delegated
+}: ButtonProps) {
   const element = href ? 'a' : 'button';
+
+  const handleClick = (event) => {
+    if (loading || disabled) return;
+    if (onClick) return onClick(event);
+  };
+
   return (
-    <StyledButton type={type || 'button'} as={element} href={href} {...rest}>
-      {children}
+    <StyledButton
+      type={type || 'button'}
+      onClick={handleClick}
+      as={element}
+      href={href}
+      disabled={disabled}
+      {...delegated}
+    >
+      <ButtonContent>
+        {loading && <LoadingIcon size={16} />}
+        <ButtonChildren $loading={loading}>{children}</ButtonChildren>
+      </ButtonContent>
     </StyledButton>
   );
 }
+
+Button.Group = ButtonGroup;
+
+export default Button;

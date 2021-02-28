@@ -1,8 +1,17 @@
 import styled from 'styled-components';
 import Navbar from '../Navbar';
 
+// const Footer = styled.footer`
+//   background: var(--color-background-secondary);
+//   padding: var(--spacing-loosest);
+//   grid-row-start: 2;
+//   grid-row-end: 3;
+// `;
+
 const Wrapper = styled.div`
   display: grid;
+  /* min-height: 100%; */
+  /* grid-template-rows: 1fr auto; */
   grid-template-columns:
     1fr
     min(100ch, calc(100% - 64px))
@@ -28,7 +37,10 @@ export default function Layout({ children }: LayoutProps) {
   return (
     <>
       <Navbar></Navbar>
-      <Wrapper>{children}</Wrapper>
+      <Wrapper>
+        {children}
+        {/* <Footer className="full-bleed">&copy; 2020 - Present</Footer> */}
+      </Wrapper>
     </>
   );
 }
