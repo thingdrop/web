@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { Heading, Layout, ProgressBar, useToast } from '@/components';
+import { Heading, Layout, ProgressBar } from '@/components';
 import { fetcher } from '@/utils';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
@@ -23,18 +23,17 @@ const Callout = styled.div`
 
 type ModelProps = {
   model: any;
-  file: any;
 };
 
 export default function Model(props: ModelProps) {
-  const { model, file } = props;
+  const { model } = props;
   const router = useRouter();
 
-  const upload = useSelector((state) => state.upload.uploads[file.id]);
+  const upload = useSelector((state) => state.upload.uploads[model.fileId]);
   const activeUpload = upload?.progress < 100;
 
   useEffect(() => {
-    if (file.status === 'CREATED') {
+    if (model.status === 'CREATED') {
       const eventSource = new EventSource(
         `http://localhost:8080/models/${model.id}/subscribe`,
       );
@@ -48,7 +47,7 @@ export default function Model(props: ModelProps) {
         eventSource.close();
       };
     }
-  }, [file.status, model.id, router]);
+  }, [model.status, model.id, router]);
 
   return (
     <Layout>
@@ -60,7 +59,7 @@ export default function Model(props: ModelProps) {
         </Callout>
       ) : (
         <ModelView>
-          {file.status === 'CREATED' && (
+          {model.status === 'CREATED' && (
             <Callout>
               <div style={{ marginBottom: '20px' }}>
                 <Spinner size={40} />
@@ -77,17 +76,11 @@ export default function Model(props: ModelProps) {
 
 export async function getServerSideProps({ params }) {
   const { id } = params;
-  const [modelResponse, fileResponse] = await Promise.all([
-    fetcher.get(`/models/${id}`),
-    fetcher.get(`/models/${id}/file`),
-  ]);
+  const modelResponse = await fetcher.get(`/models/${id}`);
   const { data: model } = modelResponse;
-  const { data: file } = fileResponse;
-
   return {
     props: {
       model,
-      file,
     },
   };
 }

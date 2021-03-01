@@ -33,7 +33,7 @@ type UploadFields = {
   fileList: FileList;
   name: string;
   description: string;
-  canDownload: boolean;
+  isPrivate: boolean;
   // filamentType: string;
   // infill: number | null;
   // printTemp: number;
@@ -214,8 +214,8 @@ export default function UploadForm() {
             </Heading> */}
 
             <Checkbox
-              id="allowDownload"
-              name="canDownload"
+              id="isPrivate"
+              name="isPrivate"
               label="Allow this model to be publicly listed."
               ref={register}
               defaultChecked={true}
