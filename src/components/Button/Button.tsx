@@ -14,6 +14,7 @@ const StyledButton = styled.div`
   text-decoration: none;
   line-height: normal;
   border: 1px solid var(--color-primary);
+  width: ${(p) => (p.fullWidth ? '100%' : 'auto')};
 `;
 
 const ButtonContent = styled.span`
@@ -41,6 +42,7 @@ type ButtonProps = {
   type?: string;
   disabled?: boolean;
   loading?: boolean;
+  fullWidth: boolean;
 };
 
 function Button({
