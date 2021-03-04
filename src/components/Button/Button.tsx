@@ -42,7 +42,7 @@ type ButtonProps = {
   type?: string;
   disabled?: boolean;
   loading?: boolean;
-  fullWidth: boolean;
+  fullWidth?: boolean;
 };
 
 function Button({
