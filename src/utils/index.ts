@@ -1,4 +1,5 @@
 export * from './fetcher';
+export * from './httpFetcher';
 export * from './mergeRefs';
 
 /* File */

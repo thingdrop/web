@@ -17,7 +17,8 @@ type PrintConfigFields = {
   notes?: string;
 };
 
-export default function PrintConfigForm(): ReactElement {
+export default function PrintConfigForm(props): ReactElement {
+  const { printConfig } = props;
   const {
     register,
     handleSubmit,
@@ -26,7 +27,11 @@ export default function PrintConfigForm(): ReactElement {
     setValue,
     setError,
     clearErrors,
-  } = useForm<PrintConfigFields>();
+  } = useForm<PrintConfigFields>({
+    defaultValues: {
+      ...printConfig,
+    },
+  });
 
   const onSubmit = async (data: PrintConfigFields) => {
     console.log({ data });

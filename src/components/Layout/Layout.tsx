@@ -7,6 +7,7 @@ const Footer = styled.footer`
   min-height: 350px;
   grid-row-start: 2;
   grid-row-end: 3;
+  margin-top: calc(var(--spacing-loosest) * 4);
 `;
 
 const Wrapper = styled.div`

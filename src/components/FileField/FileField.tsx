@@ -4,7 +4,7 @@ import Label from '../Label';
 import { CloudUploadOutline as UploadIcon } from '@styled-icons/evaicons-outline';
 import { Cube as FileIcon } from '@styled-icons/boxicons-regular';
 import InlineError from '../InlineError';
-import { fileSize, fileType } from '@/utils';
+import { getFileSize, getFileType } from '@/utils';
 import { outline } from '@/constants';
 
 const HiddenInput = styled.input`
@@ -90,7 +90,7 @@ function FileField(props: FileFieldProps, ref: any) {
       if (!validateFile(file)) {
         onError({
           type: 'manual',
-          message: `The .${fileType(file.name)} file type is not supported.`,
+          message: `The .${getFileType(file.name)} file type is not supported.`,
         });
         return;
       }
@@ -100,7 +100,7 @@ function FileField(props: FileFieldProps, ref: any) {
 
   const validateFile = (file) => {
     const validTypes = ['stl', 'obj', 'glb'];
-    const extension = fileType(file.name);
+    const extension = getFileType(file.name);
     return validTypes.includes(extension.toLowerCase());
   };
 
@@ -134,7 +134,7 @@ function FileField(props: FileFieldProps, ref: any) {
             <div>
               <FileIcon size={48} />
               <p>
-                {file.name.toLowerCase()} ({fileSize(file.size)})
+                {file.name.toLowerCase()} ({getFileSize(file.size)})
               </p>
             </div>
           ) : (

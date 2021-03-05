@@ -4,14 +4,16 @@ import {
   Button,
   Heading,
   Layout,
+  List,
   PrintConfigForm,
   ProgressBar,
   Spinner,
   Tabs,
 } from '@/components';
-import { fetcher } from '@/utils';
+import { fetcher, getTimeAgo } from '@/utils';
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import { gql } from 'graphql-request';
 
 const ModelView = styled.div`
   background-color: black;
@@ -71,7 +73,7 @@ export default function Model(props: ModelProps) {
     [],
   );
 
-  const upload = useSelector((state) => state.upload.uploads[model.fileId]);
+  const upload = useSelector((state) => state.upload.uploads[model.file.id]);
   const activeUpload = upload?.progress < 100;
 
   useEffect(() => {
@@ -127,10 +129,20 @@ export default function Model(props: ModelProps) {
           <Main>
             <Content>
               {selected === 0 && <p>{model.description}</p>}
-              {selected === 1 && <PrintConfigForm />}
+              {selected === 1 && (
+                <PrintConfigForm printConfig={model.printConfig} />
+              )}
             </Content>
             <Sidebar>
               <Button fullWidth>Download</Button>
+              <List>
+                <List.Item>Likes</List.Item>
+                <List.Item>Downloads</List.Item>
+                <List.Item>License: {model.license || 'Unspecified'}</List.Item>
+                <List.Item>
+                  Date Created: {getTimeAgo(model.dateCreated)}
+                </List.Item>
+              </List>
             </Sidebar>
           </Main>
         </Tabs>
@@ -139,10 +151,26 @@ export default function Model(props: ModelProps) {
   );
 }
 
-export async function getServerSideProps({ params }) {
-  const { id } = params;
-  const modelResponse = await fetcher.get(`/models/${id}`);
-  const { data: model } = modelResponse;
+export async function getServerSideProps(context) {
+  const { id } = context.query;
+  const query = gql`
+    {
+      model(id: "${id}") {
+        name
+        description
+        dateCreated
+        status
+        file {
+          id
+          name
+        }
+        printConfig{ infill, resolution }
+      }
+    }
+  `;
+  const modelResponse = await fetcher.request(query);
+  const { model } = modelResponse;
+  console.log({ model });
   return {
     props: {
       model,

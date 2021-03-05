@@ -4,7 +4,12 @@ import { addUpload, updateUpload } from '@/store';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import debounce from 'lodash/debounce';
-import { fetcher } from '@/utils';
+import { httpFetcher } from '@/utils';
+import {
+  useCreateModelMutation,
+  useCreateModelFileMutation,
+  setToken,
+} from '@/store';
 import {
   Button,
   Card,
@@ -87,6 +92,8 @@ export default function UploadForm() {
     setError,
     clearErrors,
   } = useForm<UploadFields>();
+  const [createModel, { isLoading }] = useCreateModelMutation();
+  const [createModelFile] = useCreateModelFileMutation();
 
   const fileList = watch('fileList');
   const file = fileList?.length === 1 ? fileList?.item(0) : null;
@@ -102,29 +109,20 @@ export default function UploadForm() {
     const file = fileList.item(0);
     const fileDto = { name: file.name, size: file.size };
 
-    const createModelResponse = await fetcher.post('/models', model);
-
-    const { id, uploadToken } = createModelResponse.data;
-    const createFilesResponse = await fetcher.post(
-      `/models/${id}/file`,
-      fileDto,
-      {
-        headers: {
-          Authorization: `Bearer ${uploadToken}`,
-        },
-      },
-    );
-
-    const { data: registeredFile } = createFilesResponse;
-    dispatch(addUpload({ id: registeredFile.id }));
-
-    const formData = createFormData(registeredFile, file);
-    const { url } = registeredFile.postPolicy;
-
-    router.push(`/${id}`);
-
     try {
-      await fetcher.post(url, formData, {
+      const createModelResponse = await createModel(model);
+      const { id, uploadToken } = createModelResponse.data;
+      dispatch(setToken(uploadToken));
+      const { data: registeredFile } = await createModelFile({ id, fileDto });
+
+      dispatch(addUpload({ id: registeredFile.id }));
+
+      const formData = createFormData(registeredFile, file);
+      const { url } = registeredFile.postPolicy;
+
+      router.push(`/${id}`);
+
+      await httpFetcher.post(url, formData, {
         onUploadProgress: debounce((progressEvent) => {
           const { loaded, total } = progressEvent;
           const progress = Math.round((loaded / total) * 100);
@@ -137,7 +135,10 @@ export default function UploadForm() {
         }, 100),
       });
     } catch (error) {
-      dispatch(updateUpload({ id: registeredFile.id, error }));
+      setSubmitting(false);
+      addToast({ content: 'Upload Error...', duration: 5000 });
+      console.error(error);
+      // dispatch(updateUpload({ id: registeredFile.id, error }));
     }
   };
 
