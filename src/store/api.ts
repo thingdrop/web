@@ -65,9 +65,11 @@ export const api = createApi({
             models(filterInput: {}) {
               name
               id
-              uploadToken
               dateCreated
               status
+              file {
+                imagePreview
+              }
             }
           }
         `,

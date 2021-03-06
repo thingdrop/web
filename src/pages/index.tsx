@@ -1,19 +1,10 @@
 import Head from 'next/head';
 import { Layout, Grid } from '@/components';
 import { useEffect, useState } from 'react';
+import { useGetModelsQuery } from '@/store';
 
 export default function Home() {
-  const [models, setModels] = useState([]);
-
-  useEffect(() => {
-    async function fetchModels() {
-      const res = await fetch('http://localhost:8080/models');
-      const models = await res.json();
-      setModels(models);
-    }
-    fetchModels();
-  }, []);
-
+  const { data: models, error, isLoading, isFetching } = useGetModelsQuery();
   return (
     <Layout>
       <main className="full-bleed">
@@ -22,8 +13,17 @@ export default function Home() {
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <Grid>
-          {models.map((model) => {
-            return <div key={model.id}>{model.name}</div>;
+          {models?.map((model) => {
+            return (
+              <div key={model.id}>
+                <img
+                  style={{ maxWidth: '200px' }}
+                  src={model?.file?.imagePreview}
+                  alt={`model ${model.name} preview`}
+                />
+                {model.name}
+              </div>
+            );
           })}
         </Grid>
       </main>

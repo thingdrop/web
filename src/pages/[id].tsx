@@ -14,9 +14,13 @@ import { fetcher, getTimeAgo } from '@/utils';
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { gql } from 'graphql-request';
+import { Tags } from '@styled-icons/fa-solid/Tags';
+import { Description } from '@styled-icons/material-rounded';
+import { Printer } from '@styled-icons/evaicons-solid';
+import { Comments } from '@styled-icons/fa-solid';
 
 const ModelView = styled.div`
-  background-color: black;
+  background-color: var(--color-background-secondary);
   height: 50vh;
 `;
 
@@ -68,9 +72,27 @@ export default function Model(props: ModelProps) {
 
   const [selected, setSelected] = useState(0);
 
+  useEffect(() => {
+    // The counter changed!
+    const { tab } = router.query;
+    if (tab) {
+      setSelected(parseInt(tab, 10));
+    }
+  }, [router.query]);
+
   const handleTabChange = useCallback(
-    (selectedTabIndex) => setSelected(selectedTabIndex),
-    [],
+    (selectedTabIndex) => {
+      setSelected(selectedTabIndex);
+      router.push(
+        {
+          pathname: `/${model.id}`,
+          query: { tab: selectedTabIndex },
+        },
+        undefined,
+        { shallow: true },
+      );
+    },
+    [router, model.id],
   );
 
   const upload = useSelector((state) => state.upload.uploads[model.file.id]);
@@ -78,20 +100,21 @@ export default function Model(props: ModelProps) {
 
   useEffect(() => {
     if (model.status === 'CREATED') {
-      const eventSource = new EventSource(
-        `http://localhost:8080/models/${model.id}/subscribe`,
-      );
-      eventSource.onmessage = ({ data }) => {
-        const { status } = JSON.parse(data);
-        if (status === 'COMPLETE') {
-          router.replace(router.asPath);
-        }
-      };
-      return () => {
-        eventSource.close();
-      };
+      console.log('TODO: create websocket to listen for model status change');
+      // const eventSource = new EventSource(
+      //   `http://localhost:8080/models/${model.id}/subscribe`,
+      // );
+      // eventSource.onmessage = ({ data }) => {
+      //   const { status } = JSON.parse(data);
+      //   if (status === 'COMPLETE') {
+      //     router.replace(router.asPath);
+      //   }
+      // };
+      // return () => {
+      //   eventSource.close();
+      // };
     }
-  }, [model.status, model.id, router]);
+  }, [model]);
 
   return (
     <Layout>
@@ -120,10 +143,38 @@ export default function Model(props: ModelProps) {
           selected={selected}
           onSelect={handleTabChange}
           tabs={[
-            { id: 'description', content: 'Description' },
-            { id: 'printConfig', content: 'Print Config' },
-            { id: 'comments', content: 'Comments' },
-            { id: 'versions', content: 'Versions' },
+            {
+              id: 'description',
+              content: (
+                <span>
+                  <Description size={20} /> Description
+                </span>
+              ),
+            },
+            {
+              id: 'printConfig',
+              content: (
+                <span>
+                  <Printer size={20} /> Print Settings
+                </span>
+              ),
+            },
+            {
+              id: 'discussion',
+              content: (
+                <span>
+                  <Comments size={20} /> Discussion
+                </span>
+              ),
+            },
+            {
+              id: 'versions',
+              content: (
+                <span>
+                  <Tags size={20} /> Versions
+                </span>
+              ),
+            },
           ]}
         >
           <Main>
@@ -156,6 +207,7 @@ export async function getServerSideProps(context) {
   const query = gql`
     {
       model(id: "${id}") {
+        id
         name
         description
         dateCreated
@@ -170,7 +222,7 @@ export async function getServerSideProps(context) {
   `;
   const modelResponse = await fetcher.request(query);
   const { model } = modelResponse;
-  console.log({ model });
+
   return {
     props: {
       model,

@@ -41,7 +41,8 @@ const TabButton = styled.button`
     left: 0;
     right: 0;
     height: 0.3em;
-    background: ${(p) => (p.$selected ? 'var(--color-text)' : 'transparent')};
+    background: ${(p) =>
+      p.$selected ? 'var(--color-primary)' : 'transparent'};
     /* transition: background var(--timing-fast), color var(--timing-fast); */
   }
   :hover {
@@ -49,7 +50,7 @@ const TabButton = styled.button`
     :after {
       background: ${(p) =>
         p.$selected
-          ? 'var(--color-text)'
+          ? 'var(--color-primary)'
           : 'var(--color-background-secondary)'};
     }
   }
@@ -85,7 +86,6 @@ export default function Tabs(props: TabsProps): ReactElement {
 
   const handleKeyUp = (event: KeyboardEvent, index: number) => {
     const { code } = event;
-    console.log({ event });
     if (code === 'ArrowRight') {
       const newTabIndex = tabRef.current[index + 1] ? index + 1 : 0;
       onSelect(newTabIndex);
