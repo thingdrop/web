@@ -18,9 +18,9 @@ function Box(props) {
       {...props}
       ref={mesh}
       scale={state.isHovered ? [1.5, 1.5, 1.5] : [1, 1, 1]}
-      onClick={(e) => setState({ ...state, isActive: !state.isActive })}
-      onPointerOver={(e) => setState({ ...state, isHovered: true })}
-      onPointerOut={(e) => setState({ ...state, isHovered: false })}
+      onClick={() => setState({ ...state, isActive: !state.isActive })}
+      onPointerOver={() => setState({ ...state, isHovered: true })}
+      onPointerOut={() => setState({ ...state, isHovered: false })}
     >
       <boxBufferGeometry args={[1, 1, 1]} />
       <meshStandardMaterial color={state.isActive ? '#820263' : '#D90368'} />

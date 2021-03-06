@@ -92,7 +92,7 @@ export default function UploadForm() {
     setError,
     clearErrors,
   } = useForm<UploadFields>();
-  const [createModel, { isLoading }] = useCreateModelMutation();
+  const [createModel, {}] = useCreateModelMutation();
   const [createModelFile] = useCreateModelFileMutation();
 
   const fileList = watch('fileList');

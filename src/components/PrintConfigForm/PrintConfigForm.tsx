@@ -23,15 +23,7 @@ type PrintConfigFields = {
 
 export default function PrintConfigForm(props: PropType): ReactElement {
   const { printConfig } = props;
-  const {
-    register,
-    handleSubmit,
-    errors,
-    watch,
-    setValue,
-    setError,
-    clearErrors,
-  } = useForm<PrintConfigFields>({
+  const { register, handleSubmit, errors, watch } = useForm<PrintConfigFields>({
     defaultValues: {
       ...printConfig,
     },

@@ -1,10 +1,9 @@
 import Head from 'next/head';
 import { Layout, Grid } from '@/components';
-import { useEffect, useState } from 'react';
 import { useGetModelsQuery } from '@/store';
 
 export default function Home() {
-  const { data: models, error, isLoading, isFetching } = useGetModelsQuery();
+  const { data: models } = useGetModelsQuery({});
   return (
     <Layout>
       <main className="full-bleed">

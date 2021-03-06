@@ -3,10 +3,7 @@ import { fetcher } from '@/utils';
 import { gql } from 'graphql-request';
 
 // create a basic `baseQuery` util
-const graphqlBaseQuery = ({ baseUrl } = {}) => async ({
-  body,
-  variables = {},
-}) => {
+const graphqlBaseQuery = ({}: any = {}) => async ({ body, variables = {} }) => {
   const result = await fetcher.request(body, variables);
   return { data: result };
 };
@@ -34,7 +31,7 @@ export const api = createApi({
         `,
         };
       },
-      transformResponse: (response) => response.createModel,
+      transformResponse: (response: any) => response.createModel,
     }),
     createModelFile: builder.mutation({
       query: ({ id, fileDto }) => {
@@ -56,7 +53,7 @@ export const api = createApi({
         `,
         };
       },
-      transformResponse: (response) => response.createModelFile,
+      transformResponse: (response: any) => response.createModelFile,
     }),
     getModels: builder.query({
       query: () => ({
@@ -75,7 +72,7 @@ export const api = createApi({
         `,
       }),
 
-      transformResponse: (response) => response.models,
+      transformResponse: (response: any) => response.models,
     }),
     getModel: builder.query({
       query: (id) => ({
@@ -99,7 +96,7 @@ export const api = createApi({
           }
         `,
       }),
-      transformResponse: (response) => response.model,
+      transformResponse: (response: any) => response.model,
     }),
   }),
 });
