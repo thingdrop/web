@@ -110,10 +110,13 @@ export default function UploadForm() {
     const fileDto = { name: file.name, size: file.size };
 
     try {
-      const createModelResponse = await createModel(model);
+      const createModelResponse: any = await createModel(model);
       const { id, uploadToken } = createModelResponse.data;
       dispatch(setToken(uploadToken));
-      const { data: registeredFile } = await createModelFile({ id, fileDto });
+      const { data: registeredFile }: any = await createModelFile({
+        id,
+        fileDto,
+      });
 
       dispatch(addUpload({ id: registeredFile.id }));
 
