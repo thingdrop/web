@@ -9,6 +9,7 @@ import {
   ProgressBar,
   Spinner,
   Tabs,
+  ModelViewer,
 } from '@/components';
 import { fetcher, getTimeAgo } from '@/utils';
 import { useCallback, useEffect, useState } from 'react';
@@ -127,13 +128,15 @@ export default function Model(props: ModelProps) {
           </Callout>
         ) : (
           <ModelView>
-            {model.status === 'CREATED' && (
+            {model.status === 'CREATED' ? (
               <Callout>
                 <div style={{ marginBottom: '20px' }}>
                   <Spinner size={40} />
                 </div>
                 <p>Your model is processing, chilll for a sec...</p>
               </Callout>
+            ) : (
+              <ModelViewer />
             )}
           </ModelView>
         )}

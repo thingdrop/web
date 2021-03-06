@@ -19,6 +19,7 @@ export { default as InlineError } from './InlineError';
 export { default as Layout } from './Layout';
 export { default as Link } from './Link';
 export { default as List } from './List';
+export { default as ModelViewer } from './ModelViewer';
 export { default as Navbar } from './Navbar';
 export { default as ProgressBar } from './ProgressBar';
 export { default as Radio } from './Radio';

@@ -6,6 +6,10 @@ const errorMessage = (fieldError) => {
   return fieldError?.message;
 };
 
+type PropType = {
+  printConfig: PrintConfigFields;
+};
+
 type PrintConfigFields = {
   filamentType?: string;
   infill?: number;
@@ -17,7 +21,7 @@ type PrintConfigFields = {
   notes?: string;
 };
 
-export default function PrintConfigForm(props): ReactElement {
+export default function PrintConfigForm(props: PropType): ReactElement {
   const { printConfig } = props;
   const {
     register,

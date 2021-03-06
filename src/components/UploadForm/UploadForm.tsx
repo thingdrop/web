@@ -211,7 +211,7 @@ export default function UploadForm() {
               name="isPrivate"
               label="Allow this model to be publicly listed."
               ref={register}
-              defaultChecked={true}
+              defaultChecked={false}
             />
 
             <Button
