@@ -1,10 +1,15 @@
 import { useRouter } from 'next/router';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { addUpload, updateUpload } from '@/store';
 import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import debounce from 'lodash/debounce';
-import { fetcher } from '@/utils';
+import { httpFetcher } from '@/utils';
+import {
+  useCreateModelMutation,
+  useCreateModelFileMutation,
+  setToken,
+} from '@/store';
 import {
   Button,
   Card,
@@ -33,14 +38,7 @@ type UploadFields = {
   fileList: FileList;
   name: string;
   description: string;
-  canDownload: boolean;
-  // filamentType: string;
-  // infill: number | null;
-  // printTemp: number;
-  // resolution: number;
-  // supportType: string;
-  // supportLocation: string;
-  // license: string;
+  isPrivate: boolean;
 };
 
 const requiredMessage = 'This field is required';
@@ -63,7 +61,6 @@ const Sidebar = styled.aside`
   align-self: start;
   position: sticky;
   top: var(--spacing-loosest);
-  margin-right: var(--spacing-loosest);
 `;
 
 const Content = styled.article`
@@ -95,6 +92,8 @@ export default function UploadForm() {
     setError,
     clearErrors,
   } = useForm<UploadFields>();
+  const [createModel, {}] = useCreateModelMutation();
+  const [createModelFile] = useCreateModelFileMutation();
 
   const fileList = watch('fileList');
   const file = fileList?.length === 1 ? fileList?.item(0) : null;
@@ -110,29 +109,23 @@ export default function UploadForm() {
     const file = fileList.item(0);
     const fileDto = { name: file.name, size: file.size };
 
-    const createModelResponse = await fetcher.post('/models', model);
-
-    const { id, uploadToken } = createModelResponse.data;
-    const createFilesResponse = await fetcher.post(
-      `/models/${id}/file`,
-      fileDto,
-      {
-        headers: {
-          Authorization: `Bearer ${uploadToken}`,
-        },
-      },
-    );
-
-    const { data: registeredFile } = createFilesResponse;
-    dispatch(addUpload({ id: registeredFile.id }));
-
-    const formData = createFormData(registeredFile, file);
-    const { url } = registeredFile.postPolicy;
-
-    router.push(`/${id}`);
-
     try {
-      await fetcher.post(url, formData, {
+      const createModelResponse: any = await createModel(model);
+      const { id, uploadToken } = createModelResponse.data;
+      dispatch(setToken(uploadToken));
+      const { data: registeredFile }: any = await createModelFile({
+        id,
+        fileDto,
+      });
+
+      dispatch(addUpload({ id: registeredFile.id }));
+
+      const formData = createFormData(registeredFile, file);
+      const { url } = registeredFile.postPolicy;
+
+      router.push(`/${id}`);
+
+      await httpFetcher.post(url, formData, {
         onUploadProgress: debounce((progressEvent) => {
           const { loaded, total } = progressEvent;
           const progress = Math.round((loaded / total) * 100);
@@ -145,7 +138,10 @@ export default function UploadForm() {
         }, 100),
       });
     } catch (error) {
-      dispatch(updateUpload({ id: registeredFile.id, error }));
+      setSubmitting(false);
+      addToast({ content: 'Upload Error...', duration: 5000 });
+      console.error(error);
+      // dispatch(updateUpload({ id: registeredFile.id, error }));
     }
   };
 
@@ -214,142 +210,12 @@ export default function UploadForm() {
             </Heading> */}
 
             <Checkbox
-              id="allowDownload"
-              name="canDownload"
+              id="isPrivate"
+              name="isPrivate"
               label="Allow this model to be publicly listed."
               ref={register}
-              defaultChecked={true}
+              defaultChecked={false}
             />
-
-            {/* <Select
-              name="filamentType"
-              label="Filament Type"
-              id="filamentType"
-              defaultValue={undefined}
-              options={[
-                { label: 'ABS', value: 'ABS' },
-                { label: 'PLA', value: 'PLA' },
-                { label: 'SLA', value: 'SLA' },
-                { label: 'Other', value: 'OTHER' },
-              ]}
-              ref={register}
-            />
-
-            <TextField
-              id="infill"
-              name="infill"
-              label="Infill (%)"
-              type="number"
-              min={0}
-              max={100}
-              suffix="%"
-              ref={register({
-                valueAsNumber: true,
-                min: {
-                  value: 0,
-                  message: 'Value cannot be negative.',
-                },
-                max: {
-                  value: 100,
-                  message: 'Value cannot be greater than 100%',
-                },
-              })}
-              error={errorMessage(errors.infill)}
-            />
-            <TextField
-              id="printTemperature"
-              name="printTemp"
-              label="Print Temperature"
-              type="number"
-              suffix="℉"
-              min={0}
-              max={1000}
-              ref={register({
-                valueAsNumber: true,
-                min: {
-                  value: 0,
-                  message: 'Value cannot be negative.',
-                },
-                max: {
-                  value: 1000,
-                  message: 'Value cannot be greater than 1000',
-                },
-              })}
-              error={errorMessage(errors.printTemp)}
-            />
-
-            <TextField
-              id="resolution"
-              name="resolution"
-              label="Resolution"
-              type="number"
-              suffix="mm"
-              min={0}
-              max={2}
-              ref={register({
-                valueAsNumber: true,
-                min: {
-                  value: 0,
-                  message: 'Value cannot be negative.',
-                },
-                max: {
-                  value: 2,
-                  message: 'Value cannot be greater than 1000',
-                },
-              })}
-              error={errorMessage(errors.resolution)}
-            />
-
-            <FormFields.Group label="Supports" inline>
-              <Select
-                name="supportType"
-                label="Support Type"
-                id="supportType"
-                defaultValue="NONE"
-                options={[
-                  { label: 'None', value: 'NONE' },
-                  { label: 'Lines', value: 'LINES' },
-                  { label: 'Grid', value: 'GRID' },
-                  {
-                    label: 'Triangles',
-                    value: 'TRIANGLES',
-                  },
-                  { label: 'Concentric', value: 'CONCENTRIC' },
-                  { label: 'Zigzag', value: 'ZIGZAG' },
-                  { label: 'Cross', value: 'CROSS' },
-                  { label: 'Gyroid', value: 'GYROID' },
-                ]}
-                ref={register}
-              />
-              {watch('supportType') !== 'NONE' && (
-                <Select
-                  name="supports"
-                  label="Support Location"
-                  id="supports"
-                  options={[
-                    { label: 'None', value: 'NONE' },
-                    { label: 'Everywhere', value: 'EVERYWHERE' },
-                    {
-                      label: 'Touching Buildplate',
-                      value: 'TOUCHING_BUILDPLATE',
-                    },
-                  ]}
-                  ref={register}
-                />
-              )}
-            </FormFields.Group>
-
-            <Select
-              name="license"
-              label="License"
-              id="license"
-              options={[
-                { label: 'BSD', value: 'BSD' },
-                { label: 'MIT', value: 'MIT' },
-                { label: 'Unlicensed', value: 'UNLICENSED' },
-              ]}
-              ref={register}
-            /> */}
 
             <Button
               type="submit"

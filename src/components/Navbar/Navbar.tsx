@@ -7,7 +7,7 @@ const Header = styled.header`
   display: grid;
   grid-template-columns:
     1fr
-    min(100ch, calc(100% - 64px))
+    min(120ch, calc(100% - 64px))
     1fr;
   grid-column-gap: 32px;
   padding: var(--spacing-tight);
@@ -51,7 +51,7 @@ export default function Navbar() {
             label="Search"
             labelHidden
             placeholder="Search for 3D models"
-            style={{ minWidth: '40ch' }}
+            style={{ minWidth: '60ch' }}
           />
         </Form>
         <Link href="/">Discover</Link>

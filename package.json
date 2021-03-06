@@ -10,9 +10,14 @@
     "test": "npm run lint"
   },
   "dependencies": {
+    "@react-three/drei": "^3.9.0",
     "@reduxjs/toolkit": "^1.5.0",
+    "@rtk-incubator/rtk-query": "^0.2.0",
     "autosize": "^4.0.2",
     "axios": "^0.21.1",
+    "date-fns": "^2.18.0",
+    "graphql": "^15.5.0",
+    "graphql-request": "^3.4.0",
     "lodash": "^4.17.21",
     "next": "10.0.6",
     "react": "17.0.1",
@@ -20,14 +25,17 @@
     "react-hook-form": "^6.15.1",
     "react-redux": "^7.2.2",
     "react-spring": "^8.0.27",
+    "react-three-fiber": "^5.3.19",
     "sass": "^1.32.8",
     "styled-components": "^5.2.1",
     "styled-icons": "^10.27.0",
-    "terser": "^5.5.1"
+    "terser": "^5.5.1",
+    "three": "^0.126.0"
   },
   "devDependencies": {
     "@types/node": "^14.14.25",
     "@types/react": "^17.0.1",
+    "@types/three": "0.125.3",
     "@typescript-eslint/eslint-plugin": "^4.15.1",
     "@typescript-eslint/parser": "^4.15.1",
     "babel-plugin-styled-components": "^1.12.0",
@@ -37,6 +45,9 @@
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "next-compose-plugins": "^2.2.1",
+    "next-offline": "^5.0.3",
+    "next-transpile-modules": "https://github.com/martpie/next-transpile-modules",
     "prettier": "^2.2.1",
     "typescript": "^4.1.3"
   }
