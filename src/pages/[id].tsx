@@ -76,7 +76,7 @@ export default function Model(props: ModelProps) {
   useEffect(() => {
     // The counter changed!
     const { tab } = router.query;
-    if (tab) {
+    if (typeof tab === 'string') {
       setSelected(parseInt(tab, 10));
     }
   }, [router.query]);
