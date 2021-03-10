@@ -4,10 +4,9 @@ import { ReactElement } from 'react';
 import { Suspense } from 'react';
 import styled from 'styled-components';
 import { Canvas } from 'react-three-fiber';
-import dynamic from 'next/dynamic';
 
-const Controls = dynamic(() => import('./Helpers/Controls'), { ssr: false });
-const Loader = dynamic(() => import('./Helpers/Loader'), { ssr: false });
+import Controls from './Helpers/Controls';
+import Loader from './Helpers/Loader';
 
 const ThreeCanvas = styled(Canvas)<any>`
   background-color: transparent;
