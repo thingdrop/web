@@ -1,35 +1,28 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
 import { ReactElement } from 'react';
-import { Suspense, lazy, useRef, useState } from 'react';
+import { Suspense } from 'react';
 import styled from 'styled-components';
 import { Canvas } from 'react-three-fiber';
+import dynamic from 'next/dynamic';
 
-const Controls = lazy(() => import('./Helpers/Controls'));
+const Controls = dynamic(() => import('./Helpers/Controls'), { ssr: false });
+const Loader = dynamic(() => import('./Helpers/Loader'), { ssr: false });
 
-const ThreeCanvas = styled(Canvas)<any>``;
+const ThreeCanvas = styled(Canvas)<any>`
+  background-color: transparent;
 
-function Box(props) {
-  const mesh = useRef();
-  const [state, setState] = useState({ isHovered: false, isActive: false });
+  &:hover {
+    border-radius: var(--border-radius-large);
+    border: var(--border-thin) solid var(--color-secondary);
+  }
+`;
 
-  return (
-    <mesh
-      {...props}
-      ref={mesh}
-      scale={state.isHovered ? [1.5, 1.5, 1.5] : [1, 1, 1]}
-      onClick={() => setState({ ...state, isActive: !state.isActive })}
-      onPointerOver={() => setState({ ...state, isHovered: true })}
-      onPointerOut={() => setState({ ...state, isHovered: false })}
-    >
-      <boxBufferGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial color={state.isActive ? '#820263' : '#D90368'} />
-    </mesh>
-  );
-}
+const ModelNav = styled.nav``;
 
 const ModelViewer = (): ReactElement => {
-  const devUrl = 'https://dev-thingdrop-public.s3.amazonaws.com/3DBenchy.stl';
+  const devUrl =
+    'https://dev-thingdrop-public.s3.amazonaws.com/1615055481954-3dbenchy.glb'; // TODO: Take this as a param
 
   return (
     <ThreeCanvas concurrent>
@@ -46,7 +39,7 @@ const ModelViewer = (): ReactElement => {
           up={[0, 0, 1]}
         />
         <Controls />
-        <Box />
+        <Loader url={devUrl} />
       </Suspense>
     </ThreeCanvas>
   );

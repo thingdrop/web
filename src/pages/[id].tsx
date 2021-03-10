@@ -21,7 +21,7 @@ import { Printer } from '@styled-icons/evaicons-solid';
 import { Comments } from '@styled-icons/fa-solid';
 
 const ModelView = styled.div`
-  background-color: var(--color-background-secondary);
+  background-color: transparent;
   height: 50vh;
 `;
 
