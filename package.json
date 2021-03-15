@@ -10,7 +10,7 @@
     "test": "npm run lint"
   },
   "dependencies": {
-    "@react-three/drei": "^3.10.0",
+    "@react-three/drei": "^3.11.0",
     "@reduxjs/toolkit": "^1.5.0",
     "@rtk-incubator/rtk-query": "^0.2.0",
     "autosize": "^4.0.2",
