@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
-import { ReactElement, useRef, Suspense, useEffect, useState } from 'react';
+import { ReactElement, useRef, Suspense, useEffect } from 'react';
 import styled from 'styled-components';
 import { Canvas } from 'react-three-fiber';
 import {
@@ -8,11 +8,16 @@ import {
   TrackballControls,
   Html,
   useProgress,
-  Center,
   PerspectiveCamera,
-  useCamera,
 } from '@react-three/drei';
 import * as THREE from 'three';
+import { usePosition } from '@/hooks';
+
+const Container = styled.div`
+  width: 100%;
+  height: 100%;
+  position: relative;
+`;
 
 const ThreeCanvas = styled(Canvas)<any>`
   background-color: transparent;
@@ -23,7 +28,23 @@ const ThreeCanvas = styled(Canvas)<any>`
   }
 `;
 
-const ModelNav = styled.nav``;
+const ModelNavContainer = styled.div<any>`
+  top: ${({ bottom }) => `${bottom}px`};
+  left: ${({ left }) => `${left}px`};
+  width: ${({ width }) => `${width}px`};
+  position: absolute;
+  z-index: 999;
+  display: none;
+  height: 80px;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  background-color: #c0c0c0;
+
+  ${Container}:hover & {
+    display: flex;
+  }
+`;
 
 const fitCameraToObject = (camera, object, controls) => {
   const offset = 1.25;
@@ -108,12 +129,26 @@ const Scene = (): ReactElement => {
 };
 
 const ModelViewer = (): ReactElement => {
+  const canvas = useRef(null);
+
+  const { left, right, bottom, height, top, width } = usePosition(ThreeCanvas);
+
   return (
-    <ThreeCanvas concurrent>
-      <Suspense fallback={<LoadingBar />}>
-        <Scene />
-      </Suspense>
-    </ThreeCanvas>
+    <Container ref={canvas}>
+      <ModelNavContainer
+        left={left}
+        right={right}
+        bottom={bottom}
+        height={height}
+        top={top}
+        width={width}
+      />
+      <ThreeCanvas concurrent>
+        <Suspense fallback={<LoadingBar />}>
+          <Scene />
+        </Suspense>
+      </ThreeCanvas>
+    </Container>
   );
 };
 
