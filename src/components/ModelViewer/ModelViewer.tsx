@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
-import { ReactElement, useRef, Suspense, useEffect } from 'react';
+import { ReactElement, useRef, Suspense, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Canvas } from 'react-three-fiber';
 import {
@@ -11,7 +11,9 @@ import {
   PerspectiveCamera,
 } from '@react-three/drei';
 import * as THREE from 'three';
-import { usePosition } from '@/hooks';
+import { SketchPicker } from 'react-color';
+
+import { Select, Button } from '@/components';
 
 const Container = styled.div`
   width: 100%;
@@ -21,17 +23,17 @@ const Container = styled.div`
 
 const ThreeCanvas = styled(Canvas)<any>`
   background-color: transparent;
+  border-radius: var(--border-radius-large);
+  border: var(--border-thin) solid transparent;
 
   &:hover {
-    border-radius: var(--border-radius-large);
     border: var(--border-thin) solid var(--color-secondary);
   }
 `;
 
 const ModelNavContainer = styled.div<any>`
-  top: ${({ bottom }) => `${bottom}px`};
-  left: ${({ left }) => `${left}px`};
-  width: ${({ width }) => `${width}px`};
+  bottom: 0;
+  width: 100%;
   position: absolute;
   z-index: 999;
   display: none;
@@ -39,45 +41,29 @@ const ModelNavContainer = styled.div<any>`
   flex-direction: row;
   justify-content: space-evenly;
   align-items: center;
-  background-color: #c0c0c0;
+  background-color: var(--color-secondary);
 
   ${Container}:hover & {
     display: flex;
   }
 `;
 
-const fitCameraToObject = (camera, object, controls) => {
-  const offset = 1.25;
+const NavSelect = styled(Select)`
+  min-width: 200px;
+`;
 
-  const boundingBox = new THREE.Box3();
+const fitCameraToObject = (camera, object) => {
+  const fov = 60 * (Math.PI / 180);
+  const objectSize = Math.sin(Date.now() * 0.001);
+  object.scale.copy(new THREE.Vector3(objectSize, objectSize, objectSize));
+  const cameraPosition = new THREE.Vector3(
+    0,
+    object.position.y + Math.abs(objectSize / Math.sin(fov / 2)),
+    0,
+  );
 
-  boundingBox.setFromObject(object);
-
-  const center = new THREE.Vector3();
-  const size = new THREE.Vector3();
-  boundingBox.getCenter(center);
-  boundingBox.getSize(size);
-
-  const maxDim = Math.max(size.x, size.y, size.z);
-  const fov = camera.fov * (Math.PI / 180);
-  let cameraZ = Math.abs((maxDim / 4) * Math.tan(fov * 2));
-
-  cameraZ *= offset;
-
-  camera.position.z = cameraZ;
-
-  const minZ = boundingBox.min.z;
-  const cameraToFarEdge = minZ < 0 ? -minZ + cameraZ : cameraZ - minZ;
-
-  camera.far = cameraToFarEdge * 3;
-  camera.updateProjectionMatrix();
-
-  if (controls) {
-    controls.target = center;
-    controls.maxDistance = cameraToFarEdge * 2;
-  } else {
-    camera.lookAt(center);
-  }
+  camera.position.copy(cameraPosition);
+  //camera.lookAt(new THREE.Vector3(0, 0, 0));
 };
 
 const LoadingBar = (): ReactElement => {
@@ -85,7 +71,12 @@ const LoadingBar = (): ReactElement => {
   return <Html center>{progress} % loaded</Html>;
 };
 
-const Scene = (): ReactElement => {
+type SceneProps = {
+  material: string;
+  color: string;
+};
+
+const Scene = ({ material, color }: SceneProps): ReactElement => {
   const devUrl =
     'https://dev-thingdrop-public.s3.amazonaws.com/1615055481954-3dbenchy.glb'; // TODO: Take this as a param
 
@@ -100,7 +91,7 @@ const Scene = (): ReactElement => {
       camera.current != null &&
       controls.current != null
     )
-      fitCameraToObject(camera.current, mesh.current, controls.current);
+      fitCameraToObject(camera.current, mesh.current);
   }, [mesh, camera, controls]);
 
   return (
@@ -121,7 +112,11 @@ const Scene = (): ReactElement => {
         geometry={scene.children[0].geometry}
         position={[0, 0, 0]}
       >
-        <meshStandardMaterial color="#fff" />
+        {material === 'wire' ? (
+          <meshStandardMaterial color={color} wireframe />
+        ) : (
+          <meshPhongMaterial color={color} />
+        )}
       </mesh>
       <TrackballControls ref={controls} />
     </>
@@ -130,22 +125,27 @@ const Scene = (): ReactElement => {
 
 const ModelViewer = (): ReactElement => {
   const canvas = useRef(null);
-
-  const { left, right, bottom, height, top, width } = usePosition(ThreeCanvas);
+  const [material, setMaterial] = useState('std');
+  const [color, setColor] = useState('#fff');
 
   return (
     <Container ref={canvas}>
-      <ModelNavContainer
-        left={left}
-        right={right}
-        bottom={bottom}
-        height={height}
-        top={top}
-        width={width}
-      />
+      <ModelNavContainer>
+        <SketchPicker color={color} onChange={(color) => setColor(color.hex)} />
+        <NavSelect
+          options={[
+            { label: 'Standard', value: 'std' },
+            { label: 'Wireframe', value: 'wire' },
+          ]}
+          name="material"
+          label="Material"
+          id="material-select"
+          onChange={(e) => setMaterial(e.target.value)}
+        />
+      </ModelNavContainer>
       <ThreeCanvas concurrent>
         <Suspense fallback={<LoadingBar />}>
-          <Scene />
+          <Scene material={material} color={color} />
         </Suspense>
       </ThreeCanvas>
     </Container>

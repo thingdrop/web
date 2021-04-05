@@ -8,12 +8,11 @@ import { KeyboardArrowDown } from '@styled-icons/material-twotone';
 const DropdownIcon = styled(KeyboardArrowDown)`
   color: var(--color-text-secondary);
 `;
+
 const StyledWrapper = styled.div`
   :focus-within {
-    outline-color: rgb(77, 144, 254); // #4D90FE
-    outline-offset: 0px;
-    outline-style: auto;
-    outline-width: 5px;
+    outline-offset: 0;
+    outline: 5px auto rgb(77, 144, 254); // #4D90FE
   }
   padding: var(--spacing-tight);
   display: flex;
@@ -149,7 +148,7 @@ function Select(props: SelectProps, ref) {
           defaultValue={defaultValue}
           onChange={handleChange}
         >
-          <option value="" hidden></option>
+          <option value="" hidden />
           {options.map(({ label, value }) => (
             <option key={value} value={value}>
               {label}
