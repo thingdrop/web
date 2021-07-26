@@ -15,7 +15,7 @@
     "@rtk-incubator/rtk-query": "^0.2.0",
     "autosize": "^4.0.2",
     "axios": "^0.21.1",
-    "date-fns": "^2.19.0",
+    "date-fns": "^2.23.0",
     "graphql": "^15.5.0",
     "graphql-request": "^3.4.0",
     "lodash": "^4.17.21",
