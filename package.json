@@ -28,13 +28,13 @@
     "react-three-fiber": "^5.3.19",
     "sass": "^1.32.8",
     "styled-components": "^5.2.1",
-    "styled-icons": "^10.29.0",
+    "styled-icons": "^10.41.0",
     "terser": "^5.6.0",
     "three": "^0.126.1"
   },
   "devDependencies": {
     "@types/node": "^14.14.31",
-    "@types/react": "^17.0.2",
+    "@types/react": "^17.0.22",
     "@types/three": "0.126.0",
     "@typescript-eslint/eslint-plugin": "^4.16.1",
     "@typescript-eslint/parser": "^4.16.1",
