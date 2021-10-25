@@ -26,7 +26,7 @@
     "react-redux": "^7.2.2",
     "react-spring": "^8.0.27",
     "react-three-fiber": "^5.3.19",
-    "sass": "^1.32.8",
+    "sass": "^1.43.3",
     "styled-components": "^5.2.1",
     "styled-icons": "^10.29.0",
     "terser": "^5.6.0",
