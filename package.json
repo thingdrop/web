@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@react-three/drei": "^3.10.0",
-    "@reduxjs/toolkit": "^1.5.0",
+    "@reduxjs/toolkit": "^1.9.1",
     "@rtk-incubator/rtk-query": "^0.2.0",
     "autosize": "^4.0.2",
     "axios": "^0.21.1",
