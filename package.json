@@ -28,7 +28,7 @@
     "react-three-fiber": "^5.3.19",
     "sass": "^1.32.8",
     "styled-components": "^5.2.1",
-    "styled-icons": "^10.29.0",
+    "styled-icons": "^10.47.0",
     "terser": "^5.6.0",
     "three": "^0.126.1"
   },
